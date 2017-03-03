@@ -1,4 +1,4 @@
-package com.quotesystem.auth;
+package com.quotesystem.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +19,7 @@ public class QuoteRestController {
 	private QuoteRepository quoteRepository;
 
 	/*
-	 * Inserts a new quote which has been received at /quote and inserts it into the NoSQL database
+	 * Inserts a new quote which has been received at /quote and inserts it into the database
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public Quote submitNewQuote(@RequestBody Quote quote) {
@@ -31,7 +31,6 @@ public class QuoteRestController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody Quote getExistingQuote(@PathVariable String id) {
-		System.out.println("REQUEST");
 		return quoteRepository.findById(id);
 	}
 
