@@ -30,7 +30,7 @@ public class TemplateRestController {
 	/*
 	 * Returns an existing template to the client at /template/{id}
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "{/id}" )
+	@RequestMapping(method = RequestMethod.GET, value = "{/view/id}" )
 	public @ResponseBody Template getExistingTemplate(@PathVariable String id) {
 		return templateRepository.findById(id);
 	}

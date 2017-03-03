@@ -23,13 +23,14 @@ public class QuoteRestController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public Quote submitNewQuote(@RequestBody Quote quote) {
+		quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
 		return quoteRepository.save(quote);
 	}
 
 	/*
-	 * Returns a new quote to the client at /quote/{id}
+	 * Returns an existing quote to the client at /quote/view/{id}
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
 	public @ResponseBody Quote getExistingQuote(@PathVariable String id) {
 		return quoteRepository.findById(id);
 	}
