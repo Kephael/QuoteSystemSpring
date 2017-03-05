@@ -1,12 +1,12 @@
 package com.quotesystem.form;
 
-public class BooleanQuestion implements QuoteEntry {
+public class BooleanQuestion implements QuoteEntry<Boolean> {
 	private boolean required;
 	private String prompt;
 	private QuestionType type;
 	private double value;
 	private double valueWeight;
-	private boolean response;
+	private Boolean response;
 	
 	@Override
 	public boolean isRequired() {
@@ -44,11 +44,13 @@ public class BooleanQuestion implements QuoteEntry {
 		this.value = value;
 	}
 
-	public boolean getResponse() {
+	@Override
+	public Boolean getResponse() {
 		return response;
 	}
 
-	public void setResponse(boolean response) {
+	@Override
+	public void setResponse(Boolean response) {
 		this.response = response;
 	}
 

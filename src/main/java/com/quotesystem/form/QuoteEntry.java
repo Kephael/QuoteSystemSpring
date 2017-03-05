@@ -1,6 +1,6 @@
 package com.quotesystem.form;
 
-interface QuoteEntry {
+interface QuoteEntry<E> {
 	public boolean isRequired();
 
 	public String getPrompt();
@@ -18,5 +18,9 @@ interface QuoteEntry {
 	public double getValueWeight();
 
 	public void setValueWeight(double valueWeight);
+	
+	public <E> E getResponse();
+	
+	public void setResponse(E response);
 
 }
