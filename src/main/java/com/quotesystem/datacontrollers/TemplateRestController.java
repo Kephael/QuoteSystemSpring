@@ -15,25 +15,24 @@ import com.quotesystem.form.TemplateRepository;
 @RestController
 @RequestMapping("/template")
 public class TemplateRestController {
-	
+
 	@Autowired
 	TemplateRepository templateRepository;
-	
+
 	/*
 	 * Inserts a new template which has been received at /template and inserts it into the database
 	 */
-	@RequestMapping(method = RequestMethod.POST, consumes = "application/json" )
-	public Template submitNewTemplate(@RequestBody Template template){
+	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+	public Template submitNewTemplate(@RequestBody Template template) {
 		return templateRepository.save(template);
 	}
-	
+
 	/*
 	 * Returns an existing template to the client at /template/view/{id}
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/view/{id}" )
+	@RequestMapping(method = RequestMethod.GET, value = "/view/{id}")
 	public @ResponseBody Template getExistingTemplate(@PathVariable String id) {
 		return templateRepository.findById(id);
 	}
-
 
 }

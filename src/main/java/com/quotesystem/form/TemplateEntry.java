@@ -30,8 +30,4 @@ public class TemplateEntry {
 		this.questionType = questionType;
 	}
 
-
-	private enum QuestionType {
-		BOOLEAN, RESPONSE, IMAGE, VALUE
-	}
 }
