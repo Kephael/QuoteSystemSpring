@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quotesystem.form.questions.Question;
 
 @Document
 public class Template {
 	@Id
-	private String id;
+	@JsonIgnore
+	private String id; // MongoDB document id
 	private String username; // user which created template
 	private String description; // description which is used to search for LIKE documents
 	private ArrayList<Question> entries;
