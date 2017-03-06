@@ -1,6 +1,5 @@
 package com.quotesystem.datacontrollers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
-import com.quotesystem.form.questions.BooleanQuestion;
-import com.quotesystem.form.questions.Question;
 
 @RestController
 @RequestMapping("/quote")

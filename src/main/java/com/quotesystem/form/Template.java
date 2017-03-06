@@ -25,6 +25,20 @@ public class Template {
 		this.id = id;
 	}
 
+	/**
+	 * @return the description of the template
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getUsername() {
 		return username;
 	}
