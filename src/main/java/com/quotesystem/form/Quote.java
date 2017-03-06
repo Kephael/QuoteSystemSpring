@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.quotesystem.form.quoteentries.QuoteEntry;
+import com.quotesystem.form.questions.Question;
 
 @Document
 public class Quote {
 	@Id
 	private String id;
 	private String username; // user which created quote
-	private ArrayList<QuoteEntry> entries;
+	private ArrayList<Question> entries;
 	private double totalQuoteValue; // total value of entries in quote
 
 	public double getTotalQuoteValue() {
@@ -24,7 +24,7 @@ public class Quote {
 	 */
 	public double calculateTotalQuoteValue() {
 		double val = 0;
-		for (QuoteEntry quoteEntry : entries) {
+		for (Question quoteEntry : entries) {
 			val += (quoteEntry.getCost());
 		}
 		return val;
@@ -50,11 +50,11 @@ public class Quote {
 		this.username = username;
 	}
 
-	public ArrayList<QuoteEntry> getEntries() {
+	public ArrayList<Question> getEntries() {
 		return entries;
 	}
 
-	public void setEntries(ArrayList<QuoteEntry> entries) {
+	public void setEntries(ArrayList<Question> entries) {
 		this.entries = entries;
 	}
 }

@@ -1,10 +1,12 @@
 package com.quotesystem.form;
 
-public class TemplateEntry {
+import com.quotesystem.form.questions.QuestionImpl;
+
+public class TemplateEntry<F extends QuestionImpl>  {
 	
 	private String prompt; // text to display for question
-	private QuestionType questionType; // type of question
 	private int questionNumber; // position of question in Template
+	private F question;
 	
 	public int getQuestionNumber() {
 		return questionNumber;
@@ -22,12 +24,12 @@ public class TemplateEntry {
 		this.prompt = prompt;
 	}
 
-	public QuestionType getQuestionType() {
-		return questionType;
+	public F getQuestionType() {
+		return question;
 	}
 
-	public void setQuestionType(QuestionType questionType) {
-		this.questionType = questionType;
+	public void setQuestionType(F questionType) {
+		this.question = questionType;
 	}
 
 }

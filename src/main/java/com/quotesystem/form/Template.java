@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.quotesystem.form.quoteentries.QuoteEntry;
+import com.quotesystem.form.questions.Question;
 
 @Document
 public class Template {
@@ -13,7 +13,7 @@ public class Template {
 	private String id;
 	private String username; // user which created template
 	private String description; // description which is used to search for LIKE documents
-	private ArrayList<QuoteEntry> entries;
+	private ArrayList<Question> entries;
 
 	public String getId() {
 		return id;
@@ -31,11 +31,11 @@ public class Template {
 		this.username = username;
 	}
 
-	public ArrayList<QuoteEntry> getEntries() {
+	public ArrayList<Question> getEntries() {
 		return entries;
 	}
 
-	public void setEntries(ArrayList<QuoteEntry> entries) {
+	public void setEntries(ArrayList<Question> entries) {
 		this.entries = entries;
 	}
 }

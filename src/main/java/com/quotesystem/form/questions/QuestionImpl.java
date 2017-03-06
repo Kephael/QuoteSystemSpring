@@ -1,18 +1,17 @@
 /*
  * This abstract class is extended allowing for new question types to be added to the quote system.
  */
-package com.quotesystem.form.quoteentries;
+package com.quotesystem.form.questions;
 
-import com.quotesystem.form.QuestionType;
-
-public abstract class QuoteEntryImpl<E, V> implements QuoteEntry<E, V> {
+public abstract class QuestionImpl<E, V> implements Question<E, V> {
 	private boolean isRequired;
 	private String prompt;
-	private QuestionType type;
 	private V value;
+	@SuppressWarnings("unused")
 	private double valueWeight;
 	private E response;
-	
+	private QuestionType type;
+
 	@Override
 	public boolean isRequired() {
 		return isRequired;
@@ -26,16 +25,6 @@ public abstract class QuoteEntryImpl<E, V> implements QuoteEntry<E, V> {
 	@Override
 	public void setPrompt(String prompt) {
 		this.prompt = prompt;
-	}
-
-	@Override
-	public QuestionType getQuestionType() {
-		return type;
-	}
-
-	@Override
-	public void setQuestionType(QuestionType questionType) {
-		this.type = questionType;
 	}
 
 	@Override
@@ -59,13 +48,27 @@ public abstract class QuoteEntryImpl<E, V> implements QuoteEntry<E, V> {
 	}
 
 	@Override
-	public  E getResponse() {
+	public E getResponse() {
 		return this.response;
 	}
 
 	@Override
 	public void setResponse(E response) {
 		this.response = response;
+	}
+
+	@Override
+	public QuestionType getType() {
+		return type;
+	}
+
+	@Override
+	public void setType(QuestionType type) {
+		this.type = type;
+	}
+
+	public void setRequired(boolean isRequired) {
+		this.isRequired = isRequired;
 	}
 
 	public abstract double getCost();
