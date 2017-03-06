@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.quotesystem.form.quoteentries.QuoteEntry;
+
 @Document
 public class Quote {
 	@Id
@@ -23,7 +25,7 @@ public class Quote {
 	public double calculateTotalQuoteValue() {
 		double val = 0;
 		for (QuoteEntry quoteEntry : entries) {
-			val += (quoteEntry.getValue() * quoteEntry.getValueWeight());
+			val += (quoteEntry.getCost());
 		}
 		return val;
 	}

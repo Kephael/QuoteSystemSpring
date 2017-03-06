@@ -1,6 +1,11 @@
-package com.quotesystem.form;
+package com.quotesystem.form.quoteentries;
 
-interface QuoteEntry<E> {
+import com.quotesystem.form.QuestionType;
+/*
+ * E is user submission type
+ * V is server-side submission evaluation format
+ */
+public interface QuoteEntry<E, V> {
 	public boolean isRequired();
 
 	public String getPrompt();
@@ -11,9 +16,9 @@ interface QuoteEntry<E> {
 
 	public void setQuestionType(QuestionType questionType);
 
-	public double getValue();
+	public V getValue();
 
-	public void setValue(double value);
+	public void setValue(V value);
 
 	public double getValueWeight();
 
@@ -22,5 +27,10 @@ interface QuoteEntry<E> {
 	public <E> E getResponse();
 	
 	public void setResponse(E response);
+
+	/*
+	 * implementation defines how response is priced
+	 */
+	public double getCost();
 
 }

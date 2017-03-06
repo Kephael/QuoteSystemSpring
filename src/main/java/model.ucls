@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.13" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
+<class-diagram version="1.1.14" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="com.quotesystem.form.QuoteEntry" project="QuoteSystem_Spring3" 
-    file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/QuoteEntry.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="1" language="java" name="com.quotesystem.form.quoteentries.QuoteEntry" project="QuoteSystem_Spring3" 
+    file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/quoteentries/QuoteEntry.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="555" y="923"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
-  </class>  
+  </interface>  
   <class id="2" language="java" name="com.quotesystem.form.Quote" project="QuoteSystem_Spring3" 
     file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/Quote.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="862" y="497"/>    
@@ -19,16 +20,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="3" language="java" name="com.quotesystem.form.QuoteEntry.QuestionType" project="QuoteSystem_Spring3" 
-    file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/QuoteEntry.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="943" y="849"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </enumeration>  
-  <class id="4" language="java" name="com.quotesystem.form.Template" project="QuoteSystem_Spring3" 
+  <class id="3" language="java" name="com.quotesystem.form.Template" project="QuoteSystem_Spring3" 
     file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/Template.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="268" y="467"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -37,7 +29,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="5" language="java" name="com.quotesystem.form.TemplateRepository" project="QuoteSystem_Spring3" 
+  <interface id="4" language="java" name="com.quotesystem.form.TemplateRepository" project="QuoteSystem_Spring3" 
     file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/TemplateRepository.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="246" y="101"/>    
@@ -47,7 +39,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="6" language="java" name="com.quotesystem.form.TemplateEntry" project="QuoteSystem_Spring3" 
+  <class id="5" language="java" name="com.quotesystem.form.TemplateEntry" project="QuoteSystem_Spring3" 
     file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/TemplateEntry.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="596" y="161"/>    
@@ -57,7 +49,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="7" language="java" name="com.quotesystem.form.QuoteRepository" project="QuoteSystem_Spring3" 
+  <interface id="6" language="java" name="com.quotesystem.form.QuoteRepository" project="QuoteSystem_Spring3" 
     file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/QuoteRepository.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="895" y="91"/>    
@@ -67,80 +59,81 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <enumeration id="8" language="java" name="com.quotesystem.form.TemplateEntry.QuestionType" 
-    project="QuoteSystem_Spring3" file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/TemplateEntry.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="565" y="417"/>    
+  <class id="7" language="java" name="com.quotesystem.form.quoteentries.QuoteEntryImpl" project="QuoteSystem_Spring3" 
+    file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/quoteentries/QuoteEntryImpl.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1051" y="933"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
-  </enumeration>  
-  <association id="9">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="10" name="entries">        
+  </class>  
+  <class id="8" language="java" name="com.quotesystem.form.quoteentries.FreeResponseQuestion" 
+    project="QuoteSystem_Spring3" 
+    file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/quoteentries/FreeResponseQuestion.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1245" y="434"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.quotesystem.form.quoteentries.BooleanQuestion" project="QuoteSystem_Spring3" 
+    file="/QuoteSystem_Spring3/src/main/java/com/quotesystem/form/quoteentries/BooleanQuestion.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1475" y="622"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="11">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="12" name="entries">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="11" minimum="0" maximum="2147483647">        
+      <multiplicity id="13" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="12">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="13" name="questionType">        
+  <generalization id="14">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <realization id="15">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="17">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="18" name="entries">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="14" minimum="0" maximum="1">        
+      <multiplicity id="19" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="15">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </nesting>  
-  <dependency id="16">    
-    <end type="SOURCE" refId="7"/>    
+  <dependency id="20">    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
-  <association id="17">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="18" name="questionType">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="19" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="20">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="21" name="entries">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="22" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="23">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <nesting id="24">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="8"/>  
-  </nesting>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
