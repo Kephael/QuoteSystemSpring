@@ -1,5 +1,6 @@
 package com.quotesystem.form.questions;
 
+
 /*
  *@param <E>  user submission type
  *@param <V> is server-side submission evaluation format
@@ -38,5 +39,7 @@ public interface Question<E, V> {
 	public QuestionType getType();
 	
 	public void setType(QuestionType type);
-
+	
+	public void setRequired(boolean required);
+	
 }

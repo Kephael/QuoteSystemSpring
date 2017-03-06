@@ -37,7 +37,19 @@ public class QuoteRestController {
 	 */
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
 	public @ResponseBody Quote getExistingQuote(@PathVariable String id) {
-		return quoteRepository.findById(id);
+		Quote quote = new Quote();
+		quote.setUsername("admin");
+		ArrayList<Question> entries = new ArrayList<>();
+		BooleanQuestion question = new BooleanQuestion();
+		question.setPrompt("Are you able to read?");
+		question.setValue(500.0);
+		question.setValueWeight(1);
+		question.setResponse(true);
+		entries.add(question);
+		quote.setEntries(entries);
+		quote.calculateTotalQuoteValue();
+		return quote;
+	//	return quoteRepository.findById(id);
 	}
 
 	/*

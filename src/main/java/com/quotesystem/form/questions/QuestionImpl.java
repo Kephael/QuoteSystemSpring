@@ -7,9 +7,9 @@ public abstract class QuestionImpl<E, V> implements Question<E, V> {
 	private boolean isRequired;
 	private String prompt;
 	private V value;
-	@SuppressWarnings("unused")
 	private double valueWeight;
 	private E response;
+	
 	private QuestionType type;
 
 	@Override
@@ -39,7 +39,7 @@ public abstract class QuestionImpl<E, V> implements Question<E, V> {
 
 	@Override
 	public double getValueWeight() {
-		return this.getValueWeight();
+		return this.valueWeight;
 	}
 
 	@Override
@@ -67,10 +67,12 @@ public abstract class QuestionImpl<E, V> implements Question<E, V> {
 		this.type = type;
 	}
 
+	@Override
 	public void setRequired(boolean isRequired) {
 		this.isRequired = isRequired;
 	}
 
+	@Override
 	public abstract double getCost();
 
 }

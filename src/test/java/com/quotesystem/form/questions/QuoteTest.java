@@ -28,7 +28,7 @@ public class QuoteTest {
 		question.setResponse(true);
 		question.setValueWeight(1);
 		questions.add(question);
-		quote.setEntries(questions);
+	//	quote.setEntries(questions);
 	}
 
 }

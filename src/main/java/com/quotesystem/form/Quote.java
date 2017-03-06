@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.quotesystem.form.questions.Question;
+import com.quotesystem.form.questions.QuestionImpl;
 
 @Document
 public class Quote {
 	@Id
 	private String id;
 	private String username; // user which created quote
+	@JsonManagedReference
 	private ArrayList<Question> entries;
 	private double totalQuoteValue; // total value of entries in quote
 
@@ -49,7 +53,7 @@ public class Quote {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	
 	public ArrayList<Question> getEntries() {
 		return entries;
 	}
