@@ -9,7 +9,6 @@ public abstract class QuestionImpl<E, V> implements Question<E, V> {
 	private V value;
 	private double valueWeight;
 	private E response;
-	
 	private QuestionType type;
 
 	@Override

@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.quotesystem.form.questions.Question;
 import com.quotesystem.form.questions.QuestionImpl;
@@ -13,7 +14,8 @@ import com.quotesystem.form.questions.QuestionImpl;
 @Document
 public class Quote {
 	@Id
-	private String id;
+	@JsonIgnore
+	private String id; // MongoDB document ID
 	private String username; // user which created quote
 	@JsonManagedReference
 	private ArrayList<Question> entries;

@@ -7,6 +7,11 @@ package com.quotesystem.form.questions;
  */
 public class BooleanQuestion extends QuestionImpl<Boolean, Double> {
 
+	public BooleanQuestion() {
+		super();
+		this.setType(QuestionType.BOOLEAN);
+	}
+	
 	@Override
 	public double getCost() {
 		if (this.getResponse()) {
