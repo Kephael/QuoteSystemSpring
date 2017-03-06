@@ -22,13 +22,19 @@ public class QuoteTest {
 	}
 
 	@Test
-	public void test() {
-		question.setPrompt("This is a test");
-		question.setValue(500);
-		question.setResponse(true);
+	public void calculateTotalQuoteValueTest() {
+		Quote quote = new Quote();
+		quote.setUsername("admin");
+		ArrayList<Question> entries = new ArrayList<>();
+		BooleanQuestion question = new BooleanQuestion();
+		question.setPrompt("Are you able to read?");
+		question.setValue(500.0);
 		question.setValueWeight(1);
-		questions.add(question);
-	//	quote.setEntries(questions);
+		question.setResponse(true);
+		entries.add(question);
+		quote.setEntries(entries);
+		quote.calculateTotalQuoteValue();
+		assertEquals(500.0, quote.calculateTotalQuoteValue(), .1);
 	}
 
 }
