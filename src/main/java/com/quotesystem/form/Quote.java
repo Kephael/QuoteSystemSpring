@@ -27,8 +27,8 @@ public class Quote {
 	 */
 	public double calculateTotalQuoteValue() {
 		double val = 0;
-		for (Question quoteEntry : entries) {
-			val += (quoteEntry.getServiceCost());
+		for (Question question : entries) {
+			val += (question.getServiceCost());
 		}
 		return val;
 	}
