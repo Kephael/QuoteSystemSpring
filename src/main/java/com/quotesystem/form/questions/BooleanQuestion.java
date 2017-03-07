@@ -13,8 +13,8 @@ public class BooleanQuestion extends QuestionImpl<Boolean, Double> {
 	}
 	
 	@Override
-	public double getCost() {
-		if (this.getResponse()) {
+	public double getServiceCost() {
+		if (this.getResponse() != null && this.getResponse()) {
 			return this.getValue() * this.getValueWeight();
 		}
 		return 0;

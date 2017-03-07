@@ -11,7 +11,7 @@ public class LongResponseQuestion extends QuestionImpl<String, String> {
 	}
 
 	@Override
-	public double getCost() {
+	public double getServiceCost() {
 		return 0;
 	}
 

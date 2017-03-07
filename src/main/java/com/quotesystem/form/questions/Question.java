@@ -26,7 +26,7 @@ public interface Question<E, V> {
 
 	public void setValueWeight(double valueWeight);
 
-	public <E> E getResponse();
+	public E getResponse();
 
 	public void setResponse(E response);
 
@@ -34,7 +34,7 @@ public interface Question<E, V> {
 	 * implementation defines how response is priced
 	 * @return pricing of QuoteEntry
 	 */
-	public double getCost();
+	public double getServiceCost();
 	
 	public QuestionType getType();
 	

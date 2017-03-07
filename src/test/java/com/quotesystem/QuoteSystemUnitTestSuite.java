@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import com.quotesystem.form.questions.BooleanQuestionTest;
-import com.quotesystem.form.questions.QuoteTest;
+import com.quotesystem.form.QuoteTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ BooleanQuestionTest.class, QuoteTest.class })

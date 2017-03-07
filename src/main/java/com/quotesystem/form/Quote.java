@@ -15,7 +15,6 @@ public class Quote {
 	@JsonIgnore
 	private String id; // MongoDB document ID
 	private String username; // user which created quote
-	@JsonManagedReference
 	private ArrayList<Question> entries;
 	private double totalQuoteValue; // total value of entries in quote
 
@@ -29,7 +28,7 @@ public class Quote {
 	public double calculateTotalQuoteValue() {
 		double val = 0;
 		for (Question quoteEntry : entries) {
-			val += (quoteEntry.getCost());
+			val += (quoteEntry.getServiceCost());
 		}
 		return val;
 	}

@@ -72,6 +72,6 @@ public abstract class QuestionImpl<E, V> implements Question<E, V> {
 	}
 
 	@Override
-	public abstract double getCost();
+	public abstract double getServiceCost();
 
 }
