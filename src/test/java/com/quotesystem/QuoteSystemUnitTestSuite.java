@@ -9,9 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import com.quotesystem.form.questions.BooleanQuestionTest;
 import com.quotesystem.form.questions.RadioQuestionTest;
-
-import datacontrollers.QuoteRestControllerTest;
-
+import com.quotesystem.datacontrollers.QuoteRestControllerTest;
 import com.quotesystem.form.QuoteTest;
 
 @RunWith(Suite.class)

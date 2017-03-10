@@ -1,4 +1,4 @@
-package datacontrollers;
+package com.quotesystem.datacontrollers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
