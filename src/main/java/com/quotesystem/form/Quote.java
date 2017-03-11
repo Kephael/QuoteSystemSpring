@@ -14,12 +14,45 @@ public class Quote {
 	@Id
 	@JsonIgnore
 	private String id; // MongoDB document ID
+	private Long identity;
+	private String description;
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	private String username; // user which created quote
 	private ArrayList<Question> entries;
 	private double totalQuoteValue; // total value of entries in quote
 
 	public double getTotalQuoteValue() {
 		return totalQuoteValue;
+	}
+
+	/**
+	 * @return the identity
+	 */
+	public Long getIdentity() {
+		return identity;
+	}
+
+	/**
+	 * @param identity
+	 *            the identity to set
+	 */
+	public void setIdentity(Long identity) {
+		this.identity = identity;
 	}
 
 	/**
@@ -52,7 +85,7 @@ public class Quote {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public ArrayList<Question> getEntries() {
 		return entries;
 	}

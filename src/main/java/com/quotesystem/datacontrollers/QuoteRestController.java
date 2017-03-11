@@ -25,16 +25,18 @@ public class QuoteRestController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public Quote submitNewQuote(@RequestBody Quote quote) {
-		quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
+		if (quote.getEntries() != null) {
+			quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
+		}
 		return quoteRepository.save(quote);
 	}
 
 	/*
 	 * Retrieves an existing quote to the client at /quote/view/{id}
 	 */
-	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-	public @ResponseBody Quote getExistingQuote(@PathVariable String id) {
-		return quoteRepository.findById(id);
+	@RequestMapping(value = "/view/{identity}", method = RequestMethod.GET)
+	public @ResponseBody Quote getExistingQuote(@PathVariable Long identity) {
+		return quoteRepository.findByIdentity(identity);
 	}
 
 	/*
@@ -43,6 +45,11 @@ public class QuoteRestController {
 	@RequestMapping(value = "/search/{username}", method = RequestMethod.GET)
 	public @ResponseBody List<Quote> getQuotesByUsername(@PathVariable String username) {
 		return quoteRepository.findByUsername(username);
+	}
+
+	@RequestMapping(value = "/delete/{identity}", method = RequestMethod.PUT)
+	public @ResponseBody Long deleteExistingQuote(@PathVariable Long identity) {
+		return quoteRepository.deleteByIdentity(identity);
 	}
 
 }

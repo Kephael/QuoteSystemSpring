@@ -13,6 +13,7 @@ public class Template {
 	@Id
 	@JsonIgnore
 	private String id; // MongoDB document id
+	private int identity;
 	private String username; // user which created template
 	private String description; // description which is used to search for LIKE documents
 	private ArrayList<Question> entries;
