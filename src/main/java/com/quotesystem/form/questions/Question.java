@@ -1,6 +1,13 @@
 package com.quotesystem.form.questions;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
+@JsonTypeInfo(use = Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({ @Type(value = RadioQuestion.class), @Type(value = BooleanQuestion.class),
+		@Type(value = LongResponseQuestion.class), })
 /*
  *@param <E>  user submission type
  *@param <V> is server-side submission evaluation format
@@ -35,11 +42,11 @@ public interface Question<E, V> {
 	 * @return pricing of QuoteEntry
 	 */
 	public double getServiceCost();
-	
+
 	public QuestionType getType();
-	
+
 	public void setType(QuestionType type);
-	
+
 	public void setRequired(boolean required);
-	
+
 }

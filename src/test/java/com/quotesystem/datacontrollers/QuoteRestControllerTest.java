@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.ws.rs.core.MediaType;
 
@@ -31,10 +32,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
+import com.quotesystem.form.questions.BooleanQuestion;
+import com.quotesystem.form.questions.Question;
+import com.quotesystem.form.questions.QuestionImpl;
+import com.quotesystem.form.questions.RadioQuestion;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
@@ -81,15 +87,49 @@ public class QuoteRestControllerTest {
 		quote.setIdentity(955005L);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
-				.andReturn();
+				.andReturn(); // submit quote with no questions
 		Quote response = mapper.readValue(result.getResponse().getContentAsString(), Quote.class);
 		assertEquals(response.getUsername(), "junit");
-		result = mvc.perform(get("/quote/view/955005")).andReturn();
+		result = mvc.perform(get("/quote/view/955005")).andReturn(); // get quote from data store
 		response = mapper.readValue(result.getResponse().getContentAsString(), Quote.class);
 		assertEquals(response.getUsername(), "junit");
 		result = mvc.perform(put("/quote/delete/955005")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // one document should be removed
 		assertEquals(1, val);
+	}
+
+	@Test
+	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	public void submitEvaluateAndDeleteTest() throws Exception {
+		Quote quote = new Quote();
+		ArrayList<Question> questions = new ArrayList<>();
+		RadioQuestion radio = new RadioQuestion();
+		BooleanQuestion question1 = new BooleanQuestion();
+		question1.setResponse(true);
+		question1.setValue(500.0);
+		question1.setValueWeight(1.0);
+		ArrayList<QuestionImpl> radioOptions = new ArrayList<QuestionImpl>();
+		radio.setValue(radioOptions);
+		radio.setResponse(0);
+		questions.add(radio);
+		quote.setEntries(questions);
+		quote.setIdentity(955006L);
+		radioOptions.add(question1);
+		String quoteJson = mapper.writeValueAsString(quote);
+		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // submit quote with Radio question
+		result = mvc.perform(put("/quote/delete/955006")).andReturn();
+		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // one documents should be removed
+		assertEquals(1, val);
+
+	}
+
+	@Test
+	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	public void removeNone() throws Exception {
+		MvcResult result = mvc.perform(put("/quote/delete/955006")).andReturn();
+		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // zero documents should be removed
+		assertEquals(0, val);
 	}
 
 }

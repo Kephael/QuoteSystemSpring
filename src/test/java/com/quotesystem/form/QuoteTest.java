@@ -1,15 +1,15 @@
 package com.quotesystem.form;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.quotesystem.form.Quote;
 import com.quotesystem.form.questions.BooleanQuestion;
 import com.quotesystem.form.questions.Question;
+import com.quotesystem.form.questions.QuestionImpl;
 
 public class QuoteTest {
 	Quote quote;
@@ -39,7 +39,7 @@ public class QuoteTest {
 	@Test
 	public void calculateTotalQuoteValueTest() {
 		Quote quote = new Quote();
-		ArrayList<Question> entries = new ArrayList<>();
+		ArrayList<Question> entries = new ArrayList<Question>();
 		BooleanQuestion question = new BooleanQuestion();
 		question.setPrompt("Are you able to read?");
 		question.setValue(500.0);

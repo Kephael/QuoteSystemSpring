@@ -6,8 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.quotesystem.form.questions.Question;
+import com.quotesystem.form.questions.QuestionImpl;
 
 @Document
 public class Quote {
@@ -90,7 +90,7 @@ public class Quote {
 		return entries;
 	}
 
-	public void setEntries(ArrayList<Question> entries) {
-		this.entries = entries;
+	public void setEntries(ArrayList<Question> questions) {
+		this.entries = questions;
 	}
 }
