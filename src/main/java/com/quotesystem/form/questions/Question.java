@@ -1,5 +1,6 @@
 package com.quotesystem.form.questions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -36,12 +37,12 @@ public interface Question<E, V> {
 	public E getResponse();
 
 	public void setResponse(E response);
-
+	
 	/*
 	 * implementation defines how response is priced
 	 * @return pricing of QuoteEntry
 	 */
-	public double getServiceCost();
+	public double calculateServiceCost();
 
 	public QuestionType getType();
 

@@ -7,10 +7,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import com.quotesystem.form.questions.BooleanQuestionTest;
-import com.quotesystem.form.questions.RadioQuestionTest;
 import com.quotesystem.datacontrollers.QuoteRestControllerTest;
 import com.quotesystem.form.QuoteTest;
+import com.quotesystem.form.questions.BooleanQuestionTest;
+import com.quotesystem.form.questions.RadioQuestionTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ BooleanQuestionTest.class, QuoteTest.class, RadioQuestionTest.class, QuoteRestControllerTest.class })

@@ -3,7 +3,7 @@
  */
 package com.quotesystem.form.questions;
 
-public abstract class QuestionImpl<E, V> implements Question<E, V> {
+public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 	private boolean isRequired;
 	private String prompt;
 	private V value;
@@ -72,6 +72,6 @@ public abstract class QuestionImpl<E, V> implements Question<E, V> {
 	}
 
 	@Override
-	public abstract double getServiceCost();
+	public abstract double calculateServiceCost();
 
 }

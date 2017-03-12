@@ -1,8 +1,8 @@
 package com.quotesystem.form;
 
-import com.quotesystem.form.questions.QuestionImpl;
+import com.quotesystem.form.questions.AbstractQuestion;
 
-public class TemplateEntry<F extends QuestionImpl>  {
+public class TemplateEntry<F extends AbstractQuestion>  {
 	
 	private String prompt; // text to display for question
 	private int questionNumber; // position of question in Template

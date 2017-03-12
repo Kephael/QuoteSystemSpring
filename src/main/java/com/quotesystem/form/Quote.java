@@ -7,15 +7,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quotesystem.form.questions.Question;
-import com.quotesystem.form.questions.QuestionImpl;
 
 @Document
 public class Quote {
 	@Id
 	@JsonIgnore
 	private String id; // MongoDB document ID
-	private Long identity;
+	private Long identity;  // unique id from which to interact with via REST
 	private String description;
+	private String username; // user which created quote
+	private ArrayList<Question> questions;
+	private double totalQuoteValue; // total value of entries in quote
 
 	/**
 	 * @return the description
@@ -31,11 +33,7 @@ public class Quote {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	private String username; // user which created quote
-	private ArrayList<Question> entries;
-	private double totalQuoteValue; // total value of entries in quote
-
+	
 	public double getTotalQuoteValue() {
 		return totalQuoteValue;
 	}
@@ -56,14 +54,14 @@ public class Quote {
 	}
 
 	/**
-	 * @return dollar value of the quote
+	 * calculates the dollar value of the quote
 	 */
-	public double calculateTotalQuoteValue() {
+	public void calculateTotalQuoteValue() {
 		double val = 0;
-		for (Question question : entries) {
-			val += (question.getServiceCost());
+		for (Question question : questions) {
+			val += (question.calculateServiceCost());
 		}
-		return val;
+		this.setTotalQuoteValue(val);
 	}
 
 	public void setTotalQuoteValue(double totalQuoteValue) {
@@ -86,11 +84,11 @@ public class Quote {
 		this.username = username;
 	}
 
-	public ArrayList<Question> getEntries() {
-		return entries;
+	public ArrayList<Question> getQuestions() {
+		return questions;
 	}
 
-	public void setEntries(ArrayList<Question> questions) {
-		this.entries = questions;
+	public void setQuestions(ArrayList<Question> questions) {
+		this.questions = questions;
 	}
 }

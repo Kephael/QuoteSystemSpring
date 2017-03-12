@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class RadioQuestionTest {
 	RadioQuestion question;
-	ArrayList<QuestionImpl> radioList;
+	ArrayList<AbstractQuestion> radioList;
 	BooleanQuestion question0;
 	LongResponseQuestion question1;
 	BooleanQuestion question2;
@@ -17,7 +17,7 @@ public class RadioQuestionTest {
 	@Before
 	public void setUp() {
 		question = new RadioQuestion();
-		radioList = new ArrayList<QuestionImpl>();
+		radioList = new ArrayList<AbstractQuestion>();
 		question0 = new BooleanQuestion();
 		question1 = new LongResponseQuestion();
 		question2 = new BooleanQuestion();
@@ -33,9 +33,9 @@ public class RadioQuestionTest {
 		question2.setResponse(true);
 		question2.setValue(120.0);
 		question2.setValueWeight(1.0);
-		assertEquals(120.0, question.getServiceCost(), 0.0);
+		assertEquals(120.0, question.calculateServiceCost(), 0.0);
 		question.setResponse(null);
-		assertEquals(0.0, question.getServiceCost(), 0.0);
+		assertEquals(0.0, question.calculateServiceCost(), 0.0);
 	}
 
 }

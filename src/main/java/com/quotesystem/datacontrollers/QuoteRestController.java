@@ -25,7 +25,7 @@ public class QuoteRestController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public Quote submitNewQuote(@RequestBody Quote quote) {
-		if (quote.getEntries() != null) {
+		if (quote.getQuestions() != null) {
 			quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
 		}
 		return quoteRepository.save(quote);
