@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface TemplateRepository extends MongoRepository<Template, String> { // 
+public interface TemplateRepository extends MongoRepository<Template, String> { // // MongoDB template data collection which will be autowired
 
-	public Template findById(String id);
+	public Template findByIdentity(Long identity);
 
-	public Template findByUsername(String username);
-
-	public List<Template> findByDescriptionLike(String description);
+	public List<Template> findByUsername(String username);
+	
+	public Long deleteByIdentity(Long identity);
+	
+	public void deleteByUsername(String username);
 }

@@ -1,5 +1,7 @@
 package com.quotesystem.datacontrollers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,11 +29,19 @@ public class TemplateRestController {
 	}
 
 	/*
-	 * Returns an existing template to the client at /template/view/{id}
+	 * @return an existing template to the client at /template/view/{id}
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/view/{id}")
-	public @ResponseBody Template getExistingTemplate(@PathVariable String id) {
-		return templateRepository.findById(id);
+	public @ResponseBody Template getExistingTemplate(@PathVariable Long identity) {
+		return templateRepository.findByIdentity(identity);
+	}
+
+	/*
+	 * @return a list of templates created by a certain username
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/search/{username}")
+	public @ResponseBody List<Template> getTemplatesByUsername(@PathVariable String username) {
+		return templateRepository.findByUsername(username);
 	}
 
 }

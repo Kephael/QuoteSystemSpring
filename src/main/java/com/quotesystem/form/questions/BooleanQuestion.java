@@ -1,8 +1,6 @@
 
 package com.quotesystem.form.questions;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /*
  * If the user response evaluates to true then the quote entry value and ValueWeight will be factored into total quote cost,
  * otherwise the quote price will remain unchanged

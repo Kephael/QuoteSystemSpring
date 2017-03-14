@@ -63,14 +63,14 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void validLoginTest() throws Exception {
 		MvcResult result = mvc.perform(get("/authenticate")).andReturn();
 		assertTrue(result.getResponse().getContentAsString().contains("true"));
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void submitAndFindAndDeleteQuoteTest() throws Exception {
 		Quote quote = new Quote();
 		quote.setUsername("junit");
@@ -89,7 +89,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void submitEvaluateAndDeleteTest() throws Exception {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
@@ -111,11 +111,10 @@ public class QuoteRestControllerTest {
 		result = mvc.perform(put("/quote/delete/955006")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // one documents should be removed
 		assertEquals(1, val);
-
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void removeNoneTest() throws Exception {
 		MvcResult result = mvc.perform(put("/quote/delete/955006")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // zero documents should be removed
@@ -123,7 +122,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void findQuotesByUserAndCheckQuoteValueTest() throws Exception {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();

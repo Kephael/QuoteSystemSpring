@@ -13,10 +13,10 @@ public class Template {
 	@Id
 	@JsonIgnore
 	private String id; // MongoDB document id
-	private int identity; // unique id from which to interact with via REST
+	private Long identity; // unique id from which to interact with via REST
 	private String username; // user which created template
 	private String description; // description which is used to search for LIKE documents
-	private ArrayList<Question> entries;
+	private ArrayList<Question> questions;
 
 	public String getId() {
 		return id;
@@ -29,14 +29,14 @@ public class Template {
 	/**
 	 * @return the identity
 	 */
-	public int getIdentity() {
+	public Long getIdentity() {
 		return identity;
 	}
 
 	/**
 	 * @param identity the identity to set
 	 */
-	public void setIdentity(int identity) {
+	public void setIdentity(Long identity) {
 		this.identity = identity;
 	}
 
@@ -62,11 +62,11 @@ public class Template {
 		this.username = username;
 	}
 
-	public ArrayList<Question> getEntries() {
-		return entries;
+	public ArrayList<Question> getQuestions() {
+		return questions;
 	}
 
-	public void setEntries(ArrayList<Question> entries) {
-		this.entries = entries;
+	public void setEntries(ArrayList<Question> questions) {
+		this.questions = questions;
 	}
 }
