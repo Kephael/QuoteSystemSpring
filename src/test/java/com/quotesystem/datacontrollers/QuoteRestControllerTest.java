@@ -32,6 +32,7 @@ import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
 import com.quotesystem.form.questions.AbstractQuestion;
 import com.quotesystem.form.questions.BooleanQuestion;
+import com.quotesystem.form.questions.LongResponseQuestion;
 import com.quotesystem.form.questions.Question;
 import com.quotesystem.form.questions.RadioQuestion;
 
@@ -66,7 +67,7 @@ public class QuoteRestControllerTest {
 	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void validLoginTest() throws Exception {
 		MvcResult result = mvc.perform(get("/authenticate")).andReturn();
-		assertTrue(result.getResponse().getContentAsString().contains("true"));
+		assertEquals(200, result.getResponse().getStatus()); // expect HTTP 200 (OK)
 	}
 
 	@Test
@@ -149,6 +150,40 @@ public class QuoteRestControllerTest {
 				 mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
 		assertEquals(2, quoteListResponse.size()); // two quotes by the "JUnit" user should be returned
 		assertEquals(500.0, quoteListResponse.get(0).getTotalQuoteValue(), 0.0); // first quote should have a value of 500
+	}
+	
+	@Test
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	public void getJson() throws Exception{
+		Quote quote = new Quote();
+		ArrayList<Question> questions = new ArrayList<>();
+		RadioQuestion radio = new RadioQuestion();
+		BooleanQuestion question1 = new BooleanQuestion();
+		question1.setResponse(true);
+		question1.setValue(500.0);
+		question1.setValueWeight(1.0);
+		LongResponseQuestion question2 = new LongResponseQuestion();
+		question2.setPrompt("This is a test prompt, can you see this?");
+		question2.setRequired(true);
+		question2.setResponse("Yes, I can see this.");
+		ArrayList<AbstractQuestion> radioOptions = new ArrayList<AbstractQuestion>();
+		radio.setValue(radioOptions);
+		radio.setResponse(0);
+		questions.add(radio);
+		questions.add(question2);
+		quote.setQuestions(questions);
+		quote.setUsername("junit");
+		quote.setIdentity(955006L);
+		radioOptions.add(question1);
+		String quoteJson = mapper.writeValueAsString(quote);
+		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // submit quote with Radio question
+		quote.setIdentity(955007L);
+		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with Radio question
+		result = mvc.perform(get("/quote/search/junit")).andReturn();
+		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				 mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(2, quoteListResponse.size()); // two quotes by the "JUnit" user should be returned
 	}
 
 }

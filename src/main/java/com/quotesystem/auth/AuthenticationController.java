@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthenticationController {
 
-	 @RequestMapping(value = "/authenticate")
-	public boolean login(){
-		return true;
+	@RequestMapping(value = "/authenticate")
+	public AuthData login() {
+		AuthData data = new AuthData();
+		return data;
 	}
-	 
 
 }

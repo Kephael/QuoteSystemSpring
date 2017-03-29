@@ -8,7 +8,7 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 	private String prompt;
 	private V value;
 	private double valueWeight;
-	private E response;
+	private E userEntry;
 	private QuestionType type;
 
 	@Override
@@ -48,12 +48,12 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 
 	@Override
 	public E getResponse() {
-		return this.response;
+		return this.userEntry;
 	}
 
 	@Override
-	public void setResponse(E response) {
-		this.response = response;
+	public void setResponse(E userEntry) {
+		this.userEntry = userEntry;
 	}
 
 	@Override

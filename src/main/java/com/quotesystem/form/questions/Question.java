@@ -35,7 +35,7 @@ public interface Question<E, V> {
 
 	public E getResponse();
 
-	public void setResponse(E response);
+	public void setResponse(E entry);
 	
 	/*
 	 * implementation defines how response is priced

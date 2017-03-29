@@ -31,7 +31,7 @@ public class TemplateRestController {
 	/*
 	 * @return an existing template to the client at /template/view/{id}
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "/view/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/view/{identity}")
 	public @ResponseBody Template getExistingTemplate(@PathVariable Long identity) {
 		return templateRepository.findByIdentity(identity);
 	}
@@ -42,6 +42,14 @@ public class TemplateRestController {
 	@RequestMapping(method = RequestMethod.GET, value = "/search/{username}")
 	public @ResponseBody List<Template> getTemplatesByUsername(@PathVariable String username) {
 		return templateRepository.findByUsername(username);
+	}
+	
+	/*
+	 * @return the number of templates deleted (should be 1 if identity was valid)
+	 */
+	@RequestMapping(value = "/delete/{identity}", method = RequestMethod.PUT)
+	public @ResponseBody Long deleteExistingTemplate(@PathVariable Long identity) {
+		return templateRepository.deleteByIdentity(identity);
 	}
 
 }
