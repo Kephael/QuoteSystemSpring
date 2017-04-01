@@ -48,5 +48,9 @@ public interface Question<E, V> {
 	public void setType(QuestionType type);
 
 	public void setRequired(boolean required);
+	
+	public void setCategory(String category);
+	
+	public String getCategory();
 
 }

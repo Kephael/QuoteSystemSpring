@@ -8,8 +8,9 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 	private String prompt;
 	private V value;
 	private double valueWeight;
-	private E userEntry;
+	private E response; // user entry (response)
 	private QuestionType type;
+	private String category;
 
 	@Override
 	public boolean isRequired() {
@@ -36,6 +37,13 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 		this.value = value;
 	}
 
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
 	@Override
 	public double getValueWeight() {
 		return this.valueWeight;
@@ -48,12 +56,12 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 
 	@Override
 	public E getResponse() {
-		return this.userEntry;
+		return this.response;
 	}
 
 	@Override
-	public void setResponse(E userEntry) {
-		this.userEntry = userEntry;
+	public void setResponse(E response) {
+		this.response = response;
 	}
 
 	@Override
@@ -73,5 +81,10 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 
 	@Override
 	public abstract double calculateServiceCost();
+
+	@Override
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
 }
