@@ -1,0 +1,60 @@
+package com.quotesystem.auth;
+
+import static org.junit.Assert.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.quotesystem.QuoteSystemSpring3Application;
+import com.quotesystem.form.QuoteRepository;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = QuoteSystemSpring3Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class AuthenticationControllerTest {
+
+	@Autowired
+	private TestRestTemplate restTemplate;
+	@Autowired
+	private WebApplicationContext context;
+	private MockMvc mvc;
+	private ObjectMapper mapper;
+	@Autowired
+	private QuoteRepository repo;
+
+	@Before
+	public void setup() {
+		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		mapper = new ObjectMapper();
+		repo.deleteByUsername("junit"); // delete any junit entries
+	}
+
+	@Test
+	public void invalidLoginTest() {
+		String body = restTemplate.getForObject("/authenticate", String.class);
+		assertTrue(body.contains("Unauthorized"));
+	}
+
+	@Test
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	public void validLoginTest() throws Exception {
+		MvcResult result = mvc.perform(get("/authenticate")).andReturn();
+		assertEquals(200, result.getResponse().getStatus()); // expect HTTP 200 (OK)
+	}
+
+}

@@ -58,19 +58,6 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	public void invalidLoginTest() {
-		String body = restTemplate.getForObject("/authenticate", String.class);
-		assertTrue(body.contains("Unauthorized"));
-	}
-
-	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
-	public void validLoginTest() throws Exception {
-		MvcResult result = mvc.perform(get("/authenticate")).andReturn();
-		assertEquals(200, result.getResponse().getStatus()); // expect HTTP 200 (OK)
-	}
-
-	@Test
 	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void submitAndFindAndDeleteQuoteTest() throws Exception {
 		Quote quote = new Quote();
