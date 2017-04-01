@@ -8,8 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.quotesystem"} )
@@ -32,9 +36,10 @@ public class QuoteSystemSpring3Application {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.httpBasic()
-			.and().rememberMe().tokenValiditySeconds(3600).key("QuoteSystem")
+			.and().sessionManagement().sessionFixation().migrateSession() // invalidate old session if user logs in again
 			.and()
 				.authorizeRequests()
+					.antMatchers(HttpMethod.OPTIONS).permitAll() // handles CORS preflight 
 					.antMatchers(HttpMethod.POST, "/template/**").hasAuthority("ROLE_ADMIN")
 					.antMatchers(HttpMethod.GET, "/template/**").hasAuthority("ROLE_USER")
 					.antMatchers("/quote/**").hasAuthority("ROLE_USER")
@@ -42,8 +47,10 @@ public class QuoteSystemSpring3Application {
 					.antMatchers("/authenticate").authenticated()
 				.and()
 					.csrf().disable();
-
 		}
+		
 
 	}
+	
+
 }

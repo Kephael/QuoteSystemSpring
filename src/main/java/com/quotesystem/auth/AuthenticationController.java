@@ -2,17 +2,19 @@ package com.quotesystem.auth;
 
 import java.util.ArrayList;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthenticationController {
 
-	@RequestMapping(value = "/authenticate")
+	@RequestMapping(method = RequestMethod.POST, value = "/authenticate")
 	public @ResponseBody AuthData login() {
 		AuthData data = new AuthData();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
