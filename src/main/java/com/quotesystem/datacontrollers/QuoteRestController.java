@@ -3,6 +3,8 @@ package com.quotesystem.datacontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,8 @@ public class QuoteRestController {
 		if (quote.getQuestions() != null) {
 			quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
 		}
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		quote.setUsername(auth.getName()); // sets quote username to that of the user logged in
 		return quoteRepository.save(quote);
 	}
 

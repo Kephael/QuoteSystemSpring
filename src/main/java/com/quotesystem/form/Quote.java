@@ -1,6 +1,7 @@
 package com.quotesystem.form;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,11 +14,27 @@ public class Quote {
 	@Id
 	@JsonIgnore
 	private String id; // MongoDB document ID
-	private Long identity;  // unique id from which to interact with via REST
+	private Long identity; // unique id from which to interact with via REST
 	private String description;
 	private String username; // user which created quote
 	private ArrayList<Question> questions;
 	private double totalQuoteValue; // total value of entries in quote
+	private HashMap<String, Double> categoryMap;
+
+	/**
+	 * @return the categoryMap
+	 */
+	public HashMap<String, Double> getCategoryMap() {
+		return categoryMap;
+	}
+
+	/**
+	 * @param categoryMap
+	 *            the categoryMap to set
+	 */
+	public void setCategoryMap(HashMap<String, Double> categoryMap) {
+		this.categoryMap = categoryMap;
+	}
 
 	/**
 	 * @return the description
@@ -33,7 +50,7 @@ public class Quote {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public double getTotalQuoteValue() {
 		return totalQuoteValue;
 	}
@@ -57,11 +74,33 @@ public class Quote {
 	 * calculates the dollar value of the quote
 	 */
 	public void calculateTotalQuoteValue() {
-		double val = 0;
+		this.setCategoryMap(new HashMap<String, Double>());
+		double totalQuoteValue = 0;
 		for (Question question : questions) {
-			val += (question.calculateServiceCost());
+			double questionValue = calculateCategoryValue(question);
+			totalQuoteValue += questionValue; // add question value to total quote value independent of category.
 		}
-		this.setTotalQuoteValue(val);
+		this.setTotalQuoteValue(totalQuoteValue);
+	}
+
+	/*
+	 * calculates category cost for each question
+	 * @return returns the value of the question
+	 */
+	private double calculateCategoryValue(Question question) {
+		double questionValue = question.calculateServiceCost();
+		String category = question.getCategory();
+		if (category == null) { // MongoDB does not support a null key for hashmap in docoument form
+			category = "undefined";
+		}
+		
+		if (categoryMap.containsKey(category)) { // category is already in map
+			double updatedCategoryValue = categoryMap.get(category) + questionValue;
+			categoryMap.put(category, updatedCategoryValue);
+		} else { // new category
+			categoryMap.put(category, questionValue); 
+		}
+		return questionValue;
 	}
 
 	public void setTotalQuoteValue(double totalQuoteValue) {

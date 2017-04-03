@@ -7,7 +7,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 @JsonTypeInfo(use = Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = CheckboxQuestion.class), @Type(value = BooleanQuestion.class),
-		@Type(value = LongResponseQuestion.class), @Type(value = RadioQuestion.class ) })
+		@Type(value = LongResponseQuestion.class), @Type(value = RadioQuestion.class),
+		@Type(value = NumericQuestion.class), @Type(value = ShortResponseQuestion.class) })
 /*
  *@param <E>  user submission type
  *@param <V> is server-side submission evaluation format
@@ -36,7 +37,7 @@ public interface Question<E, V> {
 	public E getResponse();
 
 	public void setResponse(E entry);
-	
+
 	/*
 	 * implementation defines how response is priced
 	 * @return pricing of QuoteEntry
@@ -48,9 +49,9 @@ public interface Question<E, V> {
 	public void setType(QuestionType type);
 
 	public void setRequired(boolean required);
-	
+
 	public void setCategory(String category);
-	
+
 	public String getCategory();
 
 }
