@@ -1,7 +1,6 @@
 package com.quotesystem.datacontrollers;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,12 +29,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
-import com.quotesystem.form.questions.AbstractQuestion;
 import com.quotesystem.form.questions.BooleanQuestion;
+import com.quotesystem.form.questions.CheckboxQuestion;
 import com.quotesystem.form.questions.LongResponseQuestion;
 import com.quotesystem.form.questions.Question;
 import com.quotesystem.form.questions.SelectionOption;
-import com.quotesystem.form.questions.CheckboxQuestion;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = QuoteSystemSpring3Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)

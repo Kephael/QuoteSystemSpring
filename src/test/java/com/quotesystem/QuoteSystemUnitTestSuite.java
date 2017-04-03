@@ -13,8 +13,8 @@ import com.quotesystem.datacontrollers.TemplateRestControllerTest;
 import com.quotesystem.form.QuoteTest;
 import com.quotesystem.form.TemplateTest;
 import com.quotesystem.form.questions.BooleanQuestionTest;
-import com.quotesystem.form.questions.LongResponseQuestionTest;
 import com.quotesystem.form.questions.CheckboxQuestionTest;
+import com.quotesystem.form.questions.LongResponseQuestionTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ BooleanQuestionTest.class, QuoteTest.class, CheckboxQuestionTest.class, QuoteRestControllerTest.class,

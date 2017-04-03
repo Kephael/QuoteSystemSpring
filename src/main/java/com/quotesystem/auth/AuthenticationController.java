@@ -2,7 +2,6 @@ package com.quotesystem.auth;
 
 import java.util.ArrayList;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
