@@ -1,8 +1,9 @@
 package com.quotesystem.auth;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +54,7 @@ public class AuthenticationControllerTest {
 	@Test
 	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void validLoginTest() throws Exception {
-		MvcResult result = mvc.perform(get("/authenticate")).andReturn();
+		MvcResult result = mvc.perform(post("/authenticate")).andReturn();
 		assertEquals(200, result.getResponse().getStatus()); // expect HTTP 200 (OK)
 	}
 

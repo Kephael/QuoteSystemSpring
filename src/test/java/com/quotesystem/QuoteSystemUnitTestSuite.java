@@ -14,10 +14,10 @@ import com.quotesystem.form.QuoteTest;
 import com.quotesystem.form.TemplateTest;
 import com.quotesystem.form.questions.BooleanQuestionTest;
 import com.quotesystem.form.questions.LongResponseQuestionTest;
-import com.quotesystem.form.questions.RadioQuestionTest;
+import com.quotesystem.form.questions.CheckboxQuestionTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ BooleanQuestionTest.class, QuoteTest.class, RadioQuestionTest.class, QuoteRestControllerTest.class,
+@SuiteClasses({ BooleanQuestionTest.class, QuoteTest.class, CheckboxQuestionTest.class, QuoteRestControllerTest.class,
 		TemplateRestControllerTest.class, TemplateTest.class, LongResponseQuestionTest.class, AuthenticationControllerTest.class })
 public class QuoteSystemUnitTestSuite {
 

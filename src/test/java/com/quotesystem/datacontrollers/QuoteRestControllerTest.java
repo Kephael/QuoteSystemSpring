@@ -34,7 +34,8 @@ import com.quotesystem.form.questions.AbstractQuestion;
 import com.quotesystem.form.questions.BooleanQuestion;
 import com.quotesystem.form.questions.LongResponseQuestion;
 import com.quotesystem.form.questions.Question;
-import com.quotesystem.form.questions.RadioQuestion;
+import com.quotesystem.form.questions.SelectionOption;
+import com.quotesystem.form.questions.CheckboxQuestion;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = QuoteSystemSpring3Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -81,18 +82,15 @@ public class QuoteRestControllerTest {
 	public void submitEvaluateAndDeleteTest() throws Exception {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
-		RadioQuestion radio = new RadioQuestion();
-		BooleanQuestion question1 = new BooleanQuestion();
-		question1.setResponse(true);
-		question1.setValue(500.0);
-		question1.setValueWeight(1.0);
-		ArrayList<AbstractQuestion> radioOptions = new ArrayList<AbstractQuestion>();
+		CheckboxQuestion radio = new CheckboxQuestion();
+		ArrayList<SelectionOption> radioOptions = new ArrayList<SelectionOption>();
 		radio.setValue(radioOptions);
-		radio.setResponse(0);
+		ArrayList<Integer> userSelections = new ArrayList<Integer>();
+		userSelections.add(0);
+		radio.setResponse(userSelections);
 		questions.add(radio);
 		quote.setQuestions(questions);
 		quote.setIdentity(955006L);
-		radioOptions.add(question1);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question
@@ -114,19 +112,27 @@ public class QuoteRestControllerTest {
 	public void findQuotesByUserAndCheckQuoteValueTest() throws Exception {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
-		RadioQuestion radio = new RadioQuestion();
-		BooleanQuestion question1 = new BooleanQuestion();
-		question1.setResponse(true);
-		question1.setValue(500.0);
-		question1.setValueWeight(1.0);
-		ArrayList<AbstractQuestion> radioOptions = new ArrayList<AbstractQuestion>();
+		CheckboxQuestion radio = new CheckboxQuestion();
+		ArrayList<SelectionOption> radioOptions = new ArrayList<SelectionOption>();
+		ArrayList<Integer> userSelections = new ArrayList<Integer>();
+		userSelections.add(0);
+		userSelections.add(1);
 		radio.setValue(radioOptions);
-		radio.setResponse(0);
+		SelectionOption option1 = new SelectionOption();
+		option1.setPrompt("Question 1 is a test");
+		option1.setValue(250.0);
+		option1.setValueWeight(1.5);
+		SelectionOption option2 = new SelectionOption();
+		option2.setPrompt("This is still a test for question 1");
+		option2.setValue(250.0);
+		option2.setValueWeight(0.5);
+		radioOptions.add(option1);
+		radioOptions.add(option2);
+		radio.setResponse(userSelections);
 		questions.add(radio);
 		quote.setQuestions(questions);
 		quote.setUsername("junit");
 		quote.setIdentity(955006L);
-		radioOptions.add(question1);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question
@@ -144,7 +150,7 @@ public class QuoteRestControllerTest {
 	public void getJson() throws Exception{
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
-		RadioQuestion radio = new RadioQuestion();
+		CheckboxQuestion radio = new CheckboxQuestion();
 		BooleanQuestion question1 = new BooleanQuestion();
 		question1.setResponse(true);
 		question1.setValue(500.0);
@@ -153,15 +159,16 @@ public class QuoteRestControllerTest {
 		question2.setPrompt("This is a test prompt, can you see this?");
 		question2.setRequired(true);
 		question2.setResponse("Yes, I can see this.");
-		ArrayList<AbstractQuestion> radioOptions = new ArrayList<AbstractQuestion>();
+		ArrayList<SelectionOption> radioOptions = new ArrayList<SelectionOption>();
 		radio.setValue(radioOptions);
-		radio.setResponse(0);
+		ArrayList<Integer> userSelections = new ArrayList<Integer>();
+		userSelections.add(0);
+		radio.setResponse(userSelections);
 		questions.add(radio);
 		questions.add(question2);
 		quote.setQuestions(questions);
 		quote.setUsername("junit");
 		quote.setIdentity(955006L);
-		radioOptions.add(question1);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question

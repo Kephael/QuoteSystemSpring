@@ -3,10 +3,10 @@ package com.quotesystem.form.questions;
 import java.util.List;
 
 /*
- * RadioQuestions accept a user input denoting the selection within a list of QuestionImpl, i.e. 1 for RadioOption 2.
- * This allows for a question of mixed types, i.e. 1. Numeric 2. Boolean 3. Free Response
+ * CheckboxQuestion accepts a user input denoting the selection of a list of SelectionOption, i.e. 1 for SelectionOption 2 or [1, 2] for options 2 and 3.
+ * This allows for a question composed of SelectionOptions (String selections) 
  */
-public class RadioQuestion extends AbstractQuestion<Integer, List<AbstractQuestion>> {
+public class RadioQuestion extends AbstractQuestion<List<Integer>, List<SelectionOption>> {
 
 	public RadioQuestion() {
 		super();
@@ -15,10 +15,16 @@ public class RadioQuestion extends AbstractQuestion<Integer, List<AbstractQuesti
 
 	@Override
 	public double calculateServiceCost() {
-		if (this.getValue() != null && this.getResponse() != null) {
-			return this.getValue().get(this.getResponse()).calculateServiceCost();
+		double calculatedServiceCost = 0;
+		if (this.getValue() != null && this.getResponse() != null && !this.getResponse().isEmpty()
+				&& !this.getResponse().isEmpty()) {
+			for (Integer userSelection : this.getResponse()) { // for each user selection
+				if (this.getValue().get(userSelection) != null){ // handles invalid selection of SelectionOption from attempted to be calculated
+					calculatedServiceCost += this.getValue().get(userSelection).calculateServiceCost();
+				}
+			}
 		}
-		return 0.0;
+		return calculatedServiceCost;
 	}
 
 }
