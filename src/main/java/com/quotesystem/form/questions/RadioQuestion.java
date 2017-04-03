@@ -19,7 +19,7 @@ public class RadioQuestion extends AbstractQuestion<List<Integer>, List<Selectio
 		if (this.getValue() != null && this.getResponse() != null && !this.getResponse().isEmpty()
 				&& !this.getResponse().isEmpty()) {
 			for (Integer userSelection : this.getResponse()) { // for each user selection
-				if (this.getValue().get(userSelection) != null){ // handles invalid selection of SelectionOption from attempted to be calculated
+				if (this.getValue().size() > userSelection && this.getValue().get(userSelection) != null){ // handles invalid selection of SelectionOption from attempted to be calculated
 					calculatedServiceCost += this.getValue().get(userSelection).calculateServiceCost();
 				}
 			}

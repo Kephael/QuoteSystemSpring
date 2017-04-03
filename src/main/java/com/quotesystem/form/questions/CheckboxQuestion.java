@@ -10,7 +10,7 @@ public class CheckboxQuestion extends AbstractQuestion<List<Integer>, List<Selec
 
 	public CheckboxQuestion() {
 		super();
-		this.setType(QuestionType.RADIO);
+		this.setType(QuestionType.CHECK);
 	}
 
 	@Override
