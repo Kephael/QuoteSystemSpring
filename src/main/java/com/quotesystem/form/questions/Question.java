@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-@JsonTypeInfo(use = Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "helper")
 @JsonSubTypes({ @Type(value = CheckboxQuestion.class), @Type(value = BooleanQuestion.class),
 		@Type(value = LongResponseQuestion.class), @Type(value = RadioQuestion.class),
 		@Type(value = NumericQuestion.class), @Type(value = ShortResponseQuestion.class) })
