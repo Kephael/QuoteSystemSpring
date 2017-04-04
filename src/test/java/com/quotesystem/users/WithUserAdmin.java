@@ -1,4 +1,4 @@
-package com.quotesystem.datacontrollers;
+package com.quotesystem.users;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

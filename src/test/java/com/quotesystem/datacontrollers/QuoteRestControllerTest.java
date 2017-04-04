@@ -35,6 +35,7 @@ import com.quotesystem.form.questions.CheckboxQuestion;
 import com.quotesystem.form.questions.LongResponseQuestion;
 import com.quotesystem.form.questions.Question;
 import com.quotesystem.form.questions.SelectionOption;
+import com.quotesystem.users.WithUserAdmin;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = QuoteSystemSpring3Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)

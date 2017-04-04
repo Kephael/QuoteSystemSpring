@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
 import com.quotesystem.form.QuoteRepository;
+import com.quotesystem.users.WithUserAdmin;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = QuoteSystemSpring3Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -52,7 +53,7 @@ public class AuthenticationControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void validLoginTest() throws Exception {
 		MvcResult result = mvc.perform(post("/authenticate")).andReturn();
 		assertEquals(200, result.getResponse().getStatus()); // expect HTTP 200 (OK)

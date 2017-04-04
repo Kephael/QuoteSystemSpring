@@ -30,6 +30,7 @@ import com.quotesystem.counter.CounterRepository;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.Template;
 import com.quotesystem.form.TemplateRepository;
+import com.quotesystem.users.WithUserAdmin;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = QuoteSystemSpring3Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
