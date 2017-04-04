@@ -54,7 +54,7 @@ public class TemplateRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void submitNewTemplateTest() throws Exception {
 		String templateJson = generateTemplateJson(999999L);
 		MvcResult result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))
@@ -71,7 +71,7 @@ public class TemplateRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void getTemplateAndDeleteTest() throws Exception {
 		String templateJson = generateTemplateJson(999999L);
 		mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)); // submit template with no questions
@@ -84,7 +84,7 @@ public class TemplateRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void getTemplatesByUsernameTest() throws Exception {
 		String templateJson = generateTemplateJson(999998L);
 		mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)); // submit template with no questions
@@ -96,7 +96,7 @@ public class TemplateRestControllerTest {
 	}
 	
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void CounterServiceTemplateTest() throws Exception {
 		String templateJson = generateTemplateJson(0);
 		MvcResult result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))

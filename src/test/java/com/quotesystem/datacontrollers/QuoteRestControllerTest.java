@@ -61,7 +61,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void submitAndFindAndDeleteQuoteTest() throws Exception {
 		Quote quote = new Quote();
 		quote.setIdentity(955005L);
@@ -79,7 +79,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void submitEvaluateAndDeleteTest() throws Exception {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
@@ -101,7 +101,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void removeNoneTest() throws Exception {
 		MvcResult result = mvc.perform(put("/quote/delete/955006")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // zero documents should be removed
@@ -109,7 +109,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void findQuotesByUserAndCheckQuoteValueTest() throws Exception {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
@@ -146,7 +146,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void getJson() throws Exception {
 		Quote quote = createQuote(955006);
 		String quoteJson = mapper.writeValueAsString(quote);
@@ -161,7 +161,7 @@ public class QuoteRestControllerTest {
 	}
 
 	@Test
-	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	@WithUserAdmin
 	public void CounterServiceQuoteTest() throws Exception {
 		Quote quote = createQuote(0);
 		String quoteJson = mapper.writeValueAsString(quote);
