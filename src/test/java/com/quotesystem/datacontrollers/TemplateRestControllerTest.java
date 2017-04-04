@@ -26,6 +26,8 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
+import com.quotesystem.counter.CounterRepository;
+import com.quotesystem.form.Quote;
 import com.quotesystem.form.Template;
 import com.quotesystem.form.TemplateRepository;
 
@@ -40,12 +42,15 @@ public class TemplateRestControllerTest {
 	private ObjectMapper mapper;
 	@Autowired
 	private TemplateRepository repo;
+	@Autowired
+	private CounterRepository counterRepo;
 
 	@Before
 	public void setup() {
 		repo.deleteByUsername("junit");
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mapper = new ObjectMapper();
+		counterRepo.deleteAll();
 	}
 
 	@Test
@@ -60,7 +65,6 @@ public class TemplateRestControllerTest {
 
 	private String generateTemplateJson(long identity) throws Exception {
 		Template template = new Template();
-		template.setUsername("junit");
 		template.setIdentity(identity);
 		String templateJson = mapper.writeValueAsString(template);
 		return templateJson;
@@ -89,6 +93,20 @@ public class TemplateRestControllerTest {
 		MvcResult result = mvc.perform(get("/template/search/junit")).andReturn();
 		ArrayList<Template> templates = mapper.readValue(result.getResponse().getContentAsString(), mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
 		assertEquals(2, templates.size()); // expect two templates by "junit" to be retrieved
+	}
+	
+	@Test
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	public void CounterServiceTemplateTest() throws Exception {
+		String templateJson = generateTemplateJson(0);
+		MvcResult result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))
+				.andReturn(); // submit template 0
+		result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)).andReturn(); // submit template 1
+		result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)).andReturn(); // submit template 2
+		result = mvc.perform(get("/template/search/junit")).andReturn();
+		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(2L, templateListResponse.get(2).getIdentity(), 0);
 	}
 
 }

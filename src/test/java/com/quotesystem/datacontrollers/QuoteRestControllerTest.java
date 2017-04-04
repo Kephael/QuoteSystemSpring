@@ -27,6 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
+import com.quotesystem.counter.CounterRepository;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
 import com.quotesystem.form.questions.BooleanQuestion;
@@ -48,19 +49,21 @@ public class QuoteRestControllerTest {
 	private ObjectMapper mapper;
 	@Autowired
 	private QuoteRepository repo;
+	@Autowired
+	private CounterRepository counterRepo;
 
 	@Before
 	public void setup() {
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mapper = new ObjectMapper();
 		repo.deleteByUsername("junit"); // delete any junit entries
+		counterRepo.deleteAll();
 	}
 
 	@Test
 	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
 	public void submitAndFindAndDeleteQuoteTest() throws Exception {
 		Quote quote = new Quote();
-		quote.setUsername("junit");
 		quote.setIdentity(955005L);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
@@ -129,7 +132,6 @@ public class QuoteRestControllerTest {
 		radio.setResponse(userSelections);
 		questions.add(radio);
 		quote.setQuestions(questions);
-		quote.setUsername("junit");
 		quote.setIdentity(955006L);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
@@ -138,14 +140,42 @@ public class QuoteRestControllerTest {
 		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with Radio question
 		result = mvc.perform(get("/quote/search/junit")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
-				 mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
 		assertEquals(2, quoteListResponse.size()); // two quotes by the "JUnit" user should be returned
 		assertEquals(500.0, quoteListResponse.get(0).getTotalQuoteValue(), 0.0); // first quote should have a value of 500
 	}
-	
+
 	@Test
 	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
-	public void getJson() throws Exception{
+	public void getJson() throws Exception {
+		Quote quote = createQuote(955006);
+		String quoteJson = mapper.writeValueAsString(quote);
+		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // submit quote with Radio question
+		quote.setIdentity(955007L);
+		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with Radio question
+		result = mvc.perform(get("/quote/search/junit")).andReturn();
+		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(2, quoteListResponse.size()); // two quotes by the "JUnit" user should be returned
+	}
+
+	@Test
+	@WithMockUser(username = "junit", roles = { "USER", "ADMIN" })
+	public void CounterServiceQuoteTest() throws Exception {
+		Quote quote = createQuote(0);
+		String quoteJson = mapper.writeValueAsString(quote);
+		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // submit quote 0
+		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote 1
+		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote 2
+		result = mvc.perform(get("/quote/search/junit")).andReturn();
+		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(2L, quoteListResponse.get(2).getIdentity(), 0);
+	}
+
+	private Quote createQuote(long identity) {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
 		CheckboxQuestion radio = new CheckboxQuestion();
@@ -165,17 +195,8 @@ public class QuoteRestControllerTest {
 		questions.add(radio);
 		questions.add(question2);
 		quote.setQuestions(questions);
-		quote.setUsername("junit");
-		quote.setIdentity(955006L);
-		String quoteJson = mapper.writeValueAsString(quote);
-		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
-				.andReturn(); // submit quote with Radio question
-		quote.setIdentity(955007L);
-		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with Radio question
-		result = mvc.perform(get("/quote/search/junit")).andReturn();
-		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
-				 mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
-		assertEquals(2, quoteListResponse.size()); // two quotes by the "JUnit" user should be returned
+		quote.setIdentity(identity);
+		return quote;
 	}
 
 }

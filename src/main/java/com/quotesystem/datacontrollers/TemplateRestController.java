@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quotesystem.counter.CounterService;
 import com.quotesystem.form.Template;
 import com.quotesystem.form.TemplateRepository;
 
@@ -21,6 +22,8 @@ public class TemplateRestController {
 
 	@Autowired
 	TemplateRepository templateRepository;
+	@Autowired
+	private CounterService counterService;
 
 	/*
 	 * Inserts a new template which has been received at /template and inserts it into the database
@@ -29,6 +32,9 @@ public class TemplateRestController {
 	public Template submitNewTemplate(@RequestBody Template template) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		template.setUsername(auth.getName()); // sets template username to that of the user logged in
+		if (template.getIdentity() == 0) {
+			template.setIdentity(counterService.getNextSequence("template"));
+		}
 		return templateRepository.save(template);
 	}
 
@@ -47,7 +53,7 @@ public class TemplateRestController {
 	public @ResponseBody List<Template> getTemplatesByUsername(@PathVariable String username) {
 		return templateRepository.findByUsername(username);
 	}
-	
+
 	/*
 	 * @return the number of templates deleted (should be 1 if identity was valid)
 	 */

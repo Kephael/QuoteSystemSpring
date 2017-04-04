@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.quotesystem.counter.CounterService;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
 
@@ -21,6 +22,9 @@ public class QuoteRestController {
 
 	@Autowired
 	private QuoteRepository quoteRepository;
+	@Autowired
+	private CounterService counterService;
+
 
 	/*
 	 * Inserts a new quote which has been received at /quote and inserts it into the database
@@ -32,6 +36,9 @@ public class QuoteRestController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		quote.setUsername(auth.getName()); // sets quote username to that of the user logged in
+		if (quote.getIdentity() == 0) {
+			quote.setIdentity(counterService.getNextSequence("quote"));
+		}
 		return quoteRepository.save(quote);
 	}
 
