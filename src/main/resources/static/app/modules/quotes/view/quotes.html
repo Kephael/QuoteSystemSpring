@@ -1,0 +1,19 @@
+
+
+<!-- FORM Steps -->
+<div layout="row" layout-align="center start" ng-init="ctrl.getForm(ctrl)">
+  <md-card flex style="min-height: 80%; max-width: 80%" flex="80">
+    <md-toolbar clas="md-primary md-hue-1" layout="row" layout-align="center center">
+      <span class="md-title">Form Creation</span>
+    </md-toolbar>
+    <md-steppers flex>
+      <md-step label=step.label md-complete=step.complete  ng-disabled=step.disabled ng-repeat="step in ctrl.data.steps" ng-init="stepIndex = $index">
+        <div ng-repeat="question in step.questions">
+
+          <!-- Type Options -->
+          <div flex layout="row" ng-include="'modules/quotes/view/DraggableField.html'"></div>
+        </div>
+      </md-step>
+    </md-steppers>
+  </md-card>
+</div>

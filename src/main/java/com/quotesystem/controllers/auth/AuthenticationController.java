@@ -1,4 +1,4 @@
-package com.quotesystem.auth;
+package com.quotesystem.controllers.auth;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.quotesystem.auth.AuthData;
 
 @RestController
 public class AuthenticationController {

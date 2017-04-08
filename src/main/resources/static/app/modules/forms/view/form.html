@@ -1,0 +1,29 @@
+<md-content flex ng-init="ctrl.initializeNewTemplate(); ctrl.mode = 'EDIT'">
+
+    <!-- FORM Steps -->
+    <div layout="row" layout-align="center start">
+        <md-card flex style="min-height: 80%; max-width: 80%" flex="80">
+
+            <!-- Title Bar -->
+            <md-toolbar clas="md-primary md-hue-1" layout="row" layout-align="center center">
+                <span class="md-title">Form Creation</span>
+            </md-toolbar>
+
+            <div ng-repeat="question in ctrl.form.questions">
+                <!-- Type Options -->
+                <div flex layout="row" ng-include="'modules/forms/view/DraggableField.html'"></div>
+            </div>
+        </md-card>
+    </div>
+
+    <!--Submit Button-->
+    <div layout="row" layout-align="center center">
+        <div flex="80" layout="row" layout-align="end center">
+            <!-- Remove Button -->
+            <md-button class="md-raised md-primary" style="padding-right: 8px" ng-click="ctrl.createForm()" ng-disabled="false">
+                SUBMIT
+            </md-button>
+        </div>
+    </div>
+
+</md-content>

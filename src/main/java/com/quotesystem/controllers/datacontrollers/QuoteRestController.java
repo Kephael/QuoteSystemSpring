@@ -1,4 +1,4 @@
-package com.quotesystem.datacontrollers;
+package com.quotesystem.controllers.datacontrollers;
 
 import java.util.List;
 

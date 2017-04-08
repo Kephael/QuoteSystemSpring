@@ -1,0 +1,52 @@
+<section layout="row" flex style="height: 100%">
+
+    <!-- LOGIN SECTION -->
+    <md-sidenav
+            class="md-sidenav-left login-section"
+            md-component-id="left"
+            md-is-locked-open="true"
+            md-whiteframe="2"
+            style="height: 100%">
+
+        <md-content>
+            <!-- BANNER ICON -->
+            <div class="md-whiteframe-4dp">
+                <img src="../images/banner_logo_fischer09.jpg"
+                     alt="Fischer International" style="height: 202px;width: 340px;">
+            </div>
+
+            <!-- LOGIN -->
+            <div style="width: 100%; padding-top: 64px" layout="row" layout-align="center start">
+                <md-input-container style="margin-bottom: 0px" flex="80">
+                    <label>
+                        Username
+                    </label>
+                    <input ng-model="ctrl.username"/>
+                </md-input-container>
+            </div>
+
+            <!-- PASSWORD -->
+            <div style="width: 100%" layout="row" layout-align="center start">
+                <md-input-container style="margin-bottom: 0px" flex="80">
+                    <label>
+                        Password
+                    </label>
+                    <input type="password" ng-model="ctrl.password"/>
+                </md-input-container>
+            </div>
+
+            <div style="width: 100%" layout="row" layout-align="center start">
+                <md-button flex="80" ng-click="ctrl.login()" class="md-primary md-accent md-raised">
+                    LOGIN
+                </md-button>
+            </div>
+        </md-content>
+
+    </md-sidenav>
+
+     <!--ARTWORK-->
+    <md-content flex>
+    <img src="../images/login-art.jpg" style="height: 100%; width: 100%">
+    </md-content>
+
+</section>

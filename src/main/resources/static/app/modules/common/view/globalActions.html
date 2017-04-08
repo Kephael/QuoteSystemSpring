@@ -1,0 +1,46 @@
+<div layout="row" flex style="height: 100%">
+
+    <!-- NAVIGATION -->
+    <md-sidenav
+            class="md-sidenav-left login-section"
+            md-component-id="left"
+            md-is-locked-open="true"
+            md-whiteframe="2"
+            style="height: 100%">
+
+        <md-content>
+            <!-- BANNER ICON -->
+            <div class="md-whiteframe-4dp">
+                <img src="../images/banner_logo_fischer09.jpg"
+                     alt="Fischer International" style="height: 202px;width: 340px;">
+            </div>
+
+            <div layout="row" layout-align="center center" flex
+                 ng-repeat="nav in appCtrl.navigationOptions"
+                 ng-click="appCtrl.goTo(nav.state)"
+                 class="navigation-segment"
+                 ng-if="appCtrl.isAuthorized(nav.authorized)">
+                <span class="md-title">{{nav.stateName}}</span>
+            </div>
+
+            <div layout="row" layout-align="center center" flex
+                 ng-click="appCtrl.logout()"
+                 class="navigation-segment">
+                <span class="md-title">SIGN OUT</span>
+            </div>
+        </md-content>
+    </md-sidenav>
+
+    <!--  Action Bar -->
+    <md-content flex>
+        <md-toolbar>
+            <div class="md-toolbar-tools" layout="row" layout-align="center center">
+                <span>Fischer International Identity Quotes Generator </span>
+            </div>
+        </md-toolbar>
+        <div class="md-padding"/>
+
+        <!-- content tranclusion area -->
+        <div ui-view></div>
+    </md-content>
+</div>

@@ -2,6 +2,7 @@ package com.quotesystem;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +11,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.quotesystem"} )
+@ComponentScan(basePackages = { "com.quotesystem" })
+@EnableAutoConfiguration
 public class QuoteSystemSpring3Application {
 
 	public static void main(String[] args) {
@@ -31,22 +36,16 @@ public class QuoteSystemSpring3Application {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.httpBasic()
-			.and().sessionManagement().sessionFixation().migrateSession() // invalidate old session if user logs in again
-			.and()
-				.authorizeRequests()
-					.antMatchers(HttpMethod.OPTIONS).permitAll() // handles CORS preflight 
+			http.httpBasic().and().sessionManagement().sessionFixation().migrateSession() // invalidate old session if user logs in again
+					.and().authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/template/**").hasAuthority("ROLE_ADMIN")
-					.antMatchers(HttpMethod.GET, "/template/**").hasAuthority("ROLE_USER")
-					.antMatchers("/quote/**").hasAuthority("ROLE_USER")
+					.antMatchers(HttpMethod.GET, "/template/**").hasAuthority("ROLE_USER").antMatchers("/quote/**").hasAuthority("ROLE_USER")
 					.antMatchers("/logout").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+					.antMatchers("/").permitAll()
 					.antMatchers("/authenticate").authenticated()
-				.and()
-					.csrf().disable();
+					.and().csrf().disable();
 		}
-		
 
 	}
 	
-
 }
