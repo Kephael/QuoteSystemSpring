@@ -53,7 +53,6 @@ public class QuoteSystemSpring3Application {
 					.antMatchers(HttpMethod.POST, "/template/**").hasAuthority("ROLE_ADMIN")
 					.antMatchers(HttpMethod.GET, "/template/**").hasAuthority("ROLE_USER").antMatchers("/quote/**").hasAuthority("ROLE_USER")
 					.antMatchers("/logout").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-					.antMatchers("/").permitAll()
 					.antMatchers("/authenticate").authenticated()
 					.and().csrf().disable();
 		}
