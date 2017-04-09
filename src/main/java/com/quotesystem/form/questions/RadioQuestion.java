@@ -3,7 +3,7 @@ package com.quotesystem.form.questions;
 import java.util.List;
 
 /*
- * CheckboxQuestion accepts a user input denoting the selection of a list of SelectionOption, i.e. 1 for SelectionOption 2 or [1, 2] for options 2 and 3.
+ * RadioQuestion accepts a user input denoting the selection of a list of SelectionOption, i.e. 1 for SelectionOption 2 or 0 for option 1.
  * This allows for a question composed of SelectionOptions (String selections) 
  */
 public class RadioQuestion extends AbstractQuestion<Integer, List<SelectionOption>> {
