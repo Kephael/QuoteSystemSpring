@@ -147,13 +147,13 @@ public class QuoteRestControllerTest {
 
 	@Test
 	@WithUserAdmin
-	public void getJson() throws Exception {
+	public void getJsonTest() throws Exception {
 		Quote quote = createQuote(955006);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question
 		quote.setIdentity(955007L);
-		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with Radio question
+		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with CheckBox question
 		result = mvc.perform(get("/quote/search/junit")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
