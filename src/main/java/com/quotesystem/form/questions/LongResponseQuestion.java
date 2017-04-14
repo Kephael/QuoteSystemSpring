@@ -5,11 +5,6 @@ package com.quotesystem.form.questions;
  */
 public class LongResponseQuestion extends AbstractQuestion<String, String> {
 
-	public LongResponseQuestion() {
-		super();
-		this.setType(QuestionType.LONG_RESPONSE);
-	}
-
 	@Override
 	public double calculateServiceCost() {
 		return 0;

@@ -5,11 +5,6 @@ package com.quotesystem.form.questions;
  */
 public class ShortResponseQuestion extends AbstractQuestion<String, String> {
 
-	public ShortResponseQuestion() {
-		super();
-		this.setType(QuestionType.SHORT_RESPONSE);
-	}
-
 	@Override
 	public double calculateServiceCost() {
 		return 0;

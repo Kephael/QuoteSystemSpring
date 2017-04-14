@@ -8,11 +8,6 @@ import java.util.List;
  */
 public class RadioQuestion extends AbstractQuestion<Integer, List<SelectionOption>> {
 
-	public RadioQuestion() {
-		super();
-		this.setType(QuestionType.RADIO);
-	}
-
 	@Override
 	public double calculateServiceCost() {
 		double calculatedServiceCost = 0;

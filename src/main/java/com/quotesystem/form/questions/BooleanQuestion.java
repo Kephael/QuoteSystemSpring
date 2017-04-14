@@ -7,11 +7,6 @@ package com.quotesystem.form.questions;
  */
 public class BooleanQuestion extends AbstractQuestion<Boolean, Double> {
 
-	public BooleanQuestion() {
-		super();
-		this.setType(QuestionType.BOOLEAN);
-	}
-	
 	@Override
 	public double calculateServiceCost() {
 		if (this.getResponse() != null && this.getResponse()) {

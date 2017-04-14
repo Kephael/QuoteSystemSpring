@@ -5,11 +5,6 @@ package com.quotesystem.form.questions;
  */
 public class NumericQuestion extends AbstractQuestion<Double, Double> {
 
-	public NumericQuestion() {
-		super();
-		this.setType(QuestionType.NUMERIC);
-	}
-
 	@Override
 	public double calculateServiceCost() {
 		if (this.getResponse() != null) {

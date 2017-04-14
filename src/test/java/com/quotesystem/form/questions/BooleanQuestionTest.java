@@ -24,11 +24,6 @@ public class BooleanQuestionTest {
 	}
 
 	@Test
-	public void getTypeTest() {
-		assertEquals(question.getType(), QuestionType.BOOLEAN);
-	}
-
-	@Test
 	public void getServiceCostTest() {
 		question.setResponse(false);
 		assertEquals(0.0, question.calculateServiceCost(), 0.0);

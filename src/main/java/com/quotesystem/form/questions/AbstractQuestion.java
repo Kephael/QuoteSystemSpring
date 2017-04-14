@@ -9,7 +9,6 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 	private V value;
 	private double valueWeight;
 	private E response; // user entry (response)
-	private QuestionType type;
 	private String category;
 
 	@Override
@@ -64,15 +63,6 @@ public abstract class AbstractQuestion<E, V> implements Question<E, V> {
 		this.response = response;
 	}
 
-	@Override
-	public QuestionType getType() {
-		return type;
-	}
-
-	@Override
-	public void setType(QuestionType type) {
-		this.type = type;
-	}
 
 	@Override
 	public void setRequired(boolean isRequired) {

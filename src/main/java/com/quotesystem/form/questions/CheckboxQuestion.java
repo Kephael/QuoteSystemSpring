@@ -8,11 +8,6 @@ import java.util.List;
  */
 public class CheckboxQuestion extends AbstractQuestion<List<Integer>, List<SelectionOption>> {
 
-	public CheckboxQuestion() {
-		super();
-		this.setType(QuestionType.CHECK);
-	}
-
 	@Override
 	public double calculateServiceCost() {
 		double calculatedServiceCost = 0;
