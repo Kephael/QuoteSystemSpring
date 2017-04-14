@@ -1,9 +1,0 @@
-<div style="width: 100%">
-
-    <!-- Components -->
-    <div ng-if="question.type == 'SHORT_RESPONSE'" layout="row" ng-include="'modules/forms/view/components/text-input.html'"></div>
-    <div ng-if="question.type == 'LONG_RESPONSE'" layout="row" ng-include="'modules/forms/view/components/text-input.html'"></div>
-    <div ng-if="question.type == 'RADIO'" ng-include="'modules/forms/view/components/radio-buttons.html'"></div>
-    <div ng-if="question.type == 'DROPDOWN'" ng-include="'modules/forms/view/components/dropdown.html'"></div>
-    <div ng-if="question.type == 'CHECKBOX'" ng-include="'modules/forms/view/components/checkbox.html'"></div>
-</div>

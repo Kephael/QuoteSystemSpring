@@ -35,6 +35,7 @@ public class QuoteSystemSpring3Application {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.httpBasic().and().sessionManagement().sessionFixation().migrateSession() // invalidate old session if user logs in again
 					.and().authorizeRequests()
+					.antMatchers(HttpMethod.OPTIONS).permitAll()
 					.antMatchers(HttpMethod.POST, "/template/**").hasAuthority("ROLE_ADMIN")
 					.antMatchers(HttpMethod.GET, "/template/**").hasAuthority("ROLE_USER").antMatchers("/quote/**").hasAuthority("ROLE_USER")
 					.antMatchers("/logout").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
