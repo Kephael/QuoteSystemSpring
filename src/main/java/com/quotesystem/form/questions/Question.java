@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @Type(value = CheckboxQuestion.class), @Type(value = BooleanQuestion.class),
 		@Type(value = LongResponseQuestion.class), @Type(value = RadioQuestion.class),
-		@Type(value = NumericQuestion.class), @Type(value = ShortResponseQuestion.class) })
+		@Type(value = NumericQuestion.class), @Type(value = ShortResponseQuestion.class),
+		@Type(value = SelectionOption.class), @Type(value = ImageQuestion.class)})
 /*
  *@param <E>  user submission type
  *@param <V> is server-side submission evaluation format, this parameter is sometimes used to store data such as a description and other times it is the value weight (cost/hour)
