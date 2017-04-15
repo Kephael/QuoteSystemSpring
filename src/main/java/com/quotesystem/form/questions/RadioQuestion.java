@@ -8,6 +8,22 @@ import java.util.List;
  */
 public class RadioQuestion extends AbstractQuestion<Integer, List<SelectionOption>> {
 
+	boolean radioMode; // true indicates the front end client should display with radio buttons, false indicates drop down menu selection
+	
+	/**
+	 * @return the radioMode
+	 */
+	public boolean isRadioMode() {
+		return radioMode;
+	}
+
+	/**
+	 * @param radioMode the radioMode to set
+	 */
+	public void setRadioMode(boolean radioMode) {
+		this.radioMode = radioMode;
+	}
+
 	@Override
 	public double calculateServiceCost() {
 		double calculatedServiceCost = 0;

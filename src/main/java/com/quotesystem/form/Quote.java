@@ -78,9 +78,11 @@ public class Quote {
 	public void calculateTotalQuoteValue() {
 		this.setCategoryMap(new HashMap<String, Double>());
 		double totalQuoteValue = 0;
-		for (Question question : questions) {
-			double questionValue = calculateCategoryValue(question);
-			totalQuoteValue += questionValue; // add question value to total quote value independent of category.
+		if (this.getQuestions() != null) {
+			for (Question question : questions) {
+				double questionValue = calculateCategoryValue(question);
+				totalQuoteValue += questionValue; // add question value to total quote value independent of category.
+			}
 		}
 		this.setTotalQuoteValue(totalQuoteValue);
 	}
@@ -95,12 +97,12 @@ public class Quote {
 		if (category == null) { // MongoDB does not support a null key for hashmap in docoument form
 			category = "undefined";
 		}
-		
+
 		if (categoryMap.containsKey(category)) { // category is already in map
 			double updatedCategoryValue = categoryMap.get(category) + questionValue;
 			categoryMap.put(category, updatedCategoryValue);
 		} else { // new category
-			categoryMap.put(category, questionValue); 
+			categoryMap.put(category, questionValue);
 		}
 		return questionValue;
 	}

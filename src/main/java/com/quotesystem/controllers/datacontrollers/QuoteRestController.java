@@ -9,12 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.quotesystem.auth.AuthData;
@@ -37,14 +37,28 @@ public class QuoteRestController {
 	 */
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<Quote> submitNewQuote(@RequestBody Quote quote) {
-		if (quote.getQuestions() != null) {
-			quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
-		}
+		Quote resQuote = saveQuote(quote);
+		return new ResponseEntity<Quote>(resQuote, HttpStatus.OK);
+	}
+
+	private Quote saveQuote(Quote quote) {
+		quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		quote.setUsername(auth.getName()); // sets quote username to that of the user logged in
 		quote.setIdentity(counterService.getNextSequence("quote"));
 		Quote resQuote = quoteRepository.save(quote);
-		return new ResponseEntity<Quote>(resQuote, HttpStatus.OK);
+		return resQuote;
+	}
+	
+	@Transactional
+	private Quote saveQuoteWithIdentity(Quote quote, Long identity) {
+		quote.calculateTotalQuoteValue(); // evaluate quote prior to submission into database
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		quote.setUsername(auth.getName()); // sets quote username to that of the user logged in
+		quote.setIdentity(identity);
+		quoteRepository.deleteByIdentity(identity);
+		Quote resQuote = quoteRepository.save(quote);
+		return resQuote;
 	}
 
 	/*
@@ -54,11 +68,26 @@ public class QuoteRestController {
 	public ResponseEntity<Quote> getExistingQuote(@PathVariable Long identity) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Quote resQuote = quoteRepository.findByIdentity(identity);
-		if (resQuote != null
-				&& (auth.getName().equals(resQuote.getUsername()) || auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN)))) {
+		if (resQuote != null && (auth.getName().equals(resQuote.getUsername())
+				|| auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN)))) {
 			return new ResponseEntity<Quote>(resQuote, HttpStatus.OK);
 		}
 		return new ResponseEntity<Quote>(new Quote(), HttpStatus.BAD_REQUEST); // invalid credentials to view Quote
+	}
+
+	/*
+	 * Replaces an existing quote to the client at /quote/view/{id}
+	 */
+	@RequestMapping(value = "/view/{identity}", method = RequestMethod.PUT)
+	public ResponseEntity<Quote> replaceExistingQuote(@PathVariable Long identity, @RequestBody Quote quote) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Quote oldQuote = quoteRepository.findByIdentity(identity);
+		if (oldQuote != null && (auth.getName().equals(oldQuote.getUsername())
+				|| auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN)))) {
+			Quote newQuoteFromDb =  saveQuoteWithIdentity(quote, identity);
+			return new ResponseEntity<Quote>(newQuoteFromDb, HttpStatus.OK);
+		}
+		return new ResponseEntity<Quote>(new Quote(), HttpStatus.BAD_REQUEST); // invalid replacement request
 	}
 
 	/*
@@ -67,7 +96,8 @@ public class QuoteRestController {
 	@RequestMapping(value = "/search/{username}", method = RequestMethod.GET)
 	public ResponseEntity<List<Quote>> getQuotesByUsername(@PathVariable String username) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth.getName().equals(username) || auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN))) {
+		if (auth.getName().equals(username)
+				|| auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN))) {
 			List<Quote> resQuotes = quoteRepository.findByUsername(username);
 			return new ResponseEntity<List<Quote>>(resQuotes, HttpStatus.OK);
 		}

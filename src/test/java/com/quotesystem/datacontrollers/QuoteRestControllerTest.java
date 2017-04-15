@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -234,8 +233,8 @@ public class QuoteRestControllerTest {
 	@WithUser
 	public void deleteInvalidTemplateTest() throws Exception {
 		MvcResult result = mvc.perform(put("/quote/delete/999991")).andReturn();
-		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
-		assertEquals(0, val);
+		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); 
+		assertEquals(0, val); // no quote should be removed
 		saveQuoteManually("junit");
 		result = mvc.perform(put("/quote/delete/934343")).andReturn();
 		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
@@ -267,6 +266,38 @@ public class QuoteRestControllerTest {
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 		result = mvc.perform(get("/quote/search/junit_nonexistant_user")).andReturn(); // attempt to retrieve template made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+	}
+
+	@Test
+	@WithUserAdmin
+	public void replaceQuoteTest() throws Exception {
+		Quote quote = new Quote();
+		quote.setDescription("description set");
+		String quoteJson = mapper.writeValueAsString(quote);
+		saveQuoteManually("junit_fake_user");
+		MvcResult result = mvc.perform(put("/quote/view/934343").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // attempt to replace user's quote
+		Quote responseQuote = mapper.readValue(result.getResponse().getContentAsString(), Quote.class);
+		assertEquals(quote.getDescription(), responseQuote.getDescription());
+		result = mvc.perform(put("/quote/view/999999").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // attempt to replace nonexistent quote
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+	}
+	
+	@Test
+	@WithUserAdmin
+	public void replaceAndViewQuoteTest() throws Exception {
+		submitQuotes();
+		Quote quote = createQuote();
+		quote.setDescription("test message");
+		String quoteJson = mapper.writeValueAsString(quote);
+		MvcResult result = mvc.perform(put("/quote/view/1").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
+				.andReturn(); // attempt to replace own quote
+		Quote responseQuote = mapper.readValue(result.getResponse().getContentAsString(), Quote.class); 
+		assertEquals(quote.getDescription(), responseQuote.getDescription());
+		result = mvc.perform(get("/quote/view/1")).andReturn(); // attempt to retrieve quote that was replaced
+		Quote response = mapper.readValue(result.getResponse().getContentAsString(), Quote.class);
+		assertEquals(quote.getDescription(), response.getDescription()); 
 	}
 
 }

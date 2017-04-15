@@ -27,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
 import com.quotesystem.counter.CounterRepository;
-import com.quotesystem.form.Quote;
 import com.quotesystem.form.Template;
 import com.quotesystem.form.TemplateRepository;
 import com.quotesystem.users.WithUser;
@@ -107,8 +106,8 @@ public class TemplateRestControllerTest {
 					.andReturn(); // submit template 0
 		}
 		result = mvc.perform(get("/template/search/junit")).andReturn();
-		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
-				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		ArrayList<Template> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
 		assertEquals(2L, templateListResponse.get(2).getIdentity(), 0);
 	}
 
@@ -116,10 +115,10 @@ public class TemplateRestControllerTest {
 	@WithUser
 	public void viewAllTemplateAsUserTest() throws Exception {
 		submitTemplates();
-		createTemplateManually("junit_fake_user");
+		saveTemplateManually("junit_fake_user");
 		MvcResult result = mvc.perform(get("/template/view")).andReturn();
-		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
-				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		ArrayList<Template> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
 		assertEquals(4, templateListResponse.size()); 
 	}
 
@@ -127,10 +126,10 @@ public class TemplateRestControllerTest {
 	@WithUser
 	public void viewOnlyUserTemplatesTest() throws Exception {
 		submitTemplates();
-		createTemplateManually("junit");
+		saveTemplateManually("junit");
 		MvcResult result = mvc.perform(get("/template/view")).andReturn();
-		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
-				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		ArrayList<Template> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
 		assertEquals(4, templateListResponse.size()); //  the three junit_user Templates should be provided as a response and one "junit" template
 	}
 
@@ -139,27 +138,27 @@ public class TemplateRestControllerTest {
 	public void ViewAllTemplateTestAsAdmin() throws Exception {
 		submitTemplates();
 		MvcResult result = mvc.perform(get("/template/view")).andReturn();
-		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
-				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		ArrayList<Template> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
 		assertEquals(3, templateListResponse.size());
 	}
 
 	@Test
 	@WithUser
-	public void deleteInvalidQuoteTest() throws Exception {
+	public void deleteInvalidTemplateTest() throws Exception {
 		MvcResult result = mvc.perform(put("/template/delete/999991")).andReturn();
-		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
-		assertEquals(0, val);
-		createTemplateManually("junit");
+		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); 
+		assertEquals(0, val); // no template should be removed
+		saveTemplateManually("junit");
 		result = mvc.perform(put("/template/delete/934343")).andReturn();
-		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
+		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no template should be removed as it belongs to a different user
 		assertEquals(0, val);
 	}
 
 	@Test
 	@WithUser
-	public void viewInvalidQuoteTest() throws Exception {
-		createTemplateManually("junit");
+	public void viewInvalidTemplateTest() throws Exception {
+		saveTemplateManually("junit");
 		MvcResult result = mvc.perform(get("/template/view/934343")).andReturn(); // attempt to retrieve template made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 		result = mvc.perform(get("/template/view/999987")).andReturn(); // attempt to view nonexistent template
@@ -169,20 +168,55 @@ public class TemplateRestControllerTest {
 	@Test
 	@WithUser
 	public void viewAnotherUsersTemplatesAsUserTest() throws Exception {
-		createTemplateManually("junit_fake_user");
+		saveTemplateManually("junit_fake_user");
 		MvcResult result = mvc.perform(get("/template/search/junit_fake_user")).andReturn(); // attempt to retrieve template made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 		result = mvc.perform(get("/template/search/junit_nonexistant_user")).andReturn(); // attempt to retrieve template made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 	}
 	
-	private void createTemplateManually(String username) {
+	@Test
+	@WithUserAdmin
+	public void replaceTemplateTest() throws Exception {
+		Template template = new Template();
+		String templateJson = mapper.writeValueAsString(template);
+		saveTemplateManually("junit_fake_user");
+		MvcResult result = mvc.perform(put("/template/view/934343").contentType(MediaType.APPLICATION_JSON).content(templateJson))
+				.andReturn(); // attempt to replace another user's template
+		Template responseTemplate = mapper.readValue(result.getResponse().getContentAsString(), Template.class);
+		assertEquals(template.getDescription(), responseTemplate.getDescription());
+		result = mvc.perform(put("/template/view/999999").contentType(MediaType.APPLICATION_JSON).content(templateJson))
+				.andReturn(); // attempt to replace nonexistent template
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+	}
+	
+	@Test
+	@WithUserAdmin
+	public void replaceAndViewTemplateTest() throws Exception {
+		submitTemplates();
+		Template template = new Template();
+		template.setDescription("test message");
+		String TemplateJson = mapper.writeValueAsString(template);
+		MvcResult result = mvc.perform(put("/template/view/1").contentType(MediaType.APPLICATION_JSON).content(TemplateJson))
+				.andReturn(); // attempt to replace own template
+		Template responseTemplate = mapper.readValue(result.getResponse().getContentAsString(), Template.class); 
+		assertEquals(template.getDescription(), responseTemplate.getDescription());
+		result = mvc.perform(get("/template/view/1")).andReturn(); // attempt to retrieve template that was replaced
+		Template response = mapper.readValue(result.getResponse().getContentAsString(), Template.class);
+		assertEquals(template.getDescription(), response.getDescription()); 
+	}
+	
+	
+	private void saveTemplateManually(String username) {
 		Template anotherUserTemplate = new Template();
 		anotherUserTemplate.setUsername(username);
 		anotherUserTemplate.setIdentity(934343L);
 		repo.save(anotherUserTemplate);
 	}
 
+	/*
+	 * submits three templates to the REST /template endpoint
+	 */
 	private void submitTemplates() throws Exception {
 		String templateJson = generateTemplateJson();
 		for (int i = 0; i < 3; i++) {
