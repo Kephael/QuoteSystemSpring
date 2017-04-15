@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -220,10 +221,7 @@ public class QuoteRestControllerTest {
 	@WithUser
 	public void viewOnlyUserQuotesTest() throws Exception {
 		submitQuotes();
-		Quote anotherUserQuote = new Quote();
-		anotherUserQuote.setUsername("junit");
-		anotherUserQuote.setIdentity(934343L);
-		repo.save(anotherUserQuote); // manually saves a quote as a different user
+		saveQuoteAsAdminManually();
 		MvcResult result = mvc.perform(get("/quote/view")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
@@ -246,13 +244,27 @@ public class QuoteRestControllerTest {
 		MvcResult result = mvc.perform(put("/quote/delete/999991")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
 		assertEquals(0, val);
+		saveQuoteAsAdminManually();
+		result = mvc.perform(put("/quote/delete/934343")).andReturn();
+		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
+		assertEquals(0, val);
+	}
+
+	private void saveQuoteAsAdminManually() {
 		Quote anotherUserQuote = new Quote();
 		anotherUserQuote.setUsername("junit");
 		anotherUserQuote.setIdentity(934343L);
 		repo.save(anotherUserQuote);
-		result = mvc.perform(put("/quote/delete/934343")).andReturn();
-		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
-		assertEquals(0, val);
+	}
+	
+	@Test
+	@WithUser
+	public void viewInvalidQuoteTest() throws Exception {
+		saveQuoteAsAdminManually();
+		MvcResult result = mvc.perform(get("/quote/view/934343")).andReturn(); // attempt to retrieve quote made by another user
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+		result = mvc.perform(get("/quote/view/999987")).andReturn(); // attempt to view nonexistent quote
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 	}
 
 }

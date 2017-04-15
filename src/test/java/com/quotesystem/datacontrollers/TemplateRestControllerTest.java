@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -127,10 +128,7 @@ public class TemplateRestControllerTest {
 	@WithUser
 	public void viewOnlyUserTemplatesTest() throws Exception {
 		submitTemplates();
-		Template anotherUserTemplate = new Template();
-		anotherUserTemplate.setUsername("junit");
-		anotherUserTemplate.setIdentity(934343L);
-		repo.save(anotherUserTemplate); // manually saves a template as a different user
+		createTemplateAsAdminManually();
 		MvcResult result = mvc.perform(get("/template/view")).andReturn();
 		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
@@ -153,15 +151,29 @@ public class TemplateRestControllerTest {
 		MvcResult result = mvc.perform(put("/template/delete/999991")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
 		assertEquals(0, val);
-		Template anotherUserTemplate = new Template();
-		anotherUserTemplate.setUsername("junit");
-		anotherUserTemplate.setIdentity(934343L);
-		repo.save(anotherUserTemplate);
+		createTemplateAsAdminManually();
 		result = mvc.perform(put("/template/delete/934343")).andReturn();
 		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
 		assertEquals(0, val);
 	}
 
+	@Test
+	@WithUser
+	public void viewInvalidQuoteTest() throws Exception {
+		createTemplateAsAdminManually();
+		MvcResult result = mvc.perform(get("/template/view/934343")).andReturn(); // attempt to retrieve template made by another user
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+		result = mvc.perform(get("/template/view/999987")).andReturn(); // attempt to view nonexistent template
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+	}
+
+	private void createTemplateAsAdminManually() {
+		Template anotherUserTemplate = new Template();
+		anotherUserTemplate.setUsername("junit");
+		anotherUserTemplate.setIdentity(934343L);
+		repo.save(anotherUserTemplate);
+	}
+	
 	private void submitTemplates() throws Exception {
 		String templateJson = generateTemplateJson(0);
 		for (int i = 0; i < 3; i++) {

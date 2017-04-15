@@ -13,7 +13,7 @@ public class CheckboxQuestion extends AbstractQuestion<List<Integer>, List<Selec
 		double calculatedServiceCost = 0;
 		if (this.getValue() != null && this.getResponse() != null ) {
 			for (Integer userSelection : this.getResponse()) { // for each user selection
-				if (this.getValue().size() > userSelection && this.getValue().get(userSelection) != null) { // handles invalid selection of SelectionOption from attempted to be calculated
+				if (this.getValue().size() > userSelection && this.getValue().get(userSelection) != null) { // prevents invalid selection of SelectionOption from attempted to be calculated
 					calculatedServiceCost += this.getValue().get(userSelection).calculateServiceCost();
 				}
 			}
