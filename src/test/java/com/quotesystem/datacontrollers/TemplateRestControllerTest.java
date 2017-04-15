@@ -48,7 +48,6 @@ public class TemplateRestControllerTest {
 
 	@Before
 	public void setup() {
-		repo.deleteAll();
 		repo.deleteByUsername("junit_user");
 		repo.deleteByUsername("junit");
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
@@ -148,6 +147,20 @@ public class TemplateRestControllerTest {
 		assertEquals(3, templateListResponse.size());
 	}
 
+	@Test
+	@WithUser
+	public void deleteInvalidQuoteTest() throws Exception {
+		MvcResult result = mvc.perform(put("/template/delete/999991")).andReturn();
+		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
+		assertEquals(0, val);
+		Template anotherUserTemplate = new Template();
+		anotherUserTemplate.setUsername("junit");
+		anotherUserTemplate.setIdentity(934343L);
+		repo.save(anotherUserTemplate);
+		result = mvc.perform(put("/template/delete/934343")).andReturn();
+		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
+		assertEquals(0, val);
+	}
 
 	private void submitTemplates() throws Exception {
 		String templateJson = generateTemplateJson(0);

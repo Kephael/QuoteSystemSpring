@@ -197,7 +197,7 @@ public class QuoteRestControllerTest {
 		quote.setIdentity(identity);
 		return quote;
 	}
-	
+
 	private void submitQuotes() throws Exception {
 		Quote quote = createQuote(0);
 		String quoteJson = mapper.writeValueAsString(quote);
@@ -238,6 +238,21 @@ public class QuoteRestControllerTest {
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
 		assertEquals(3, quoteListResponse.size());
+	}
+
+	@Test
+	@WithUser
+	public void deleteInvalidTemplateTest() throws Exception {
+		MvcResult result = mvc.perform(put("/quote/delete/999991")).andReturn();
+		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
+		assertEquals(0, val);
+		Quote anotherUserQuote = new Quote();
+		anotherUserQuote.setUsername("junit");
+		anotherUserQuote.setIdentity(934343L);
+		repo.save(anotherUserQuote);
+		result = mvc.perform(put("/quote/delete/934343")).andReturn();
+		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
+		assertEquals(0, val);
 	}
 
 }
