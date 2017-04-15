@@ -64,16 +64,16 @@ public class QuoteRestControllerTest {
 	@WithUserAdmin
 	public void submitAndFindAndDeleteQuoteTest() throws Exception {
 		Quote quote = new Quote();
-		quote.setIdentity(955005L);
+		quote.setDescription("testing");
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with no questions
 		Quote response = mapper.readValue(result.getResponse().getContentAsString(), Quote.class);
 		assertEquals(response.getUsername(), "junit");
-		result = mvc.perform(get("/quote/view/955005")).andReturn(); // get quote from data store
+		result = mvc.perform(get("/quote/view/0")).andReturn(); // get quote from data store
 		response = mapper.readValue(result.getResponse().getContentAsString(), Quote.class);
 		assertEquals(response.getUsername(), "junit");
-		result = mvc.perform(put("/quote/delete/955005")).andReturn();
+		result = mvc.perform(put("/quote/delete/0")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // one document should be removed
 		assertEquals(1, val);
 	}
@@ -91,11 +91,11 @@ public class QuoteRestControllerTest {
 		radio.setResponse(userSelections);
 		questions.add(radio);
 		quote.setQuestions(questions);
-		quote.setIdentity(955006L);
+		quote.setDescription("testing");
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question
-		result = mvc.perform(put("/quote/delete/955006")).andReturn();
+		result = mvc.perform(put("/quote/delete/0")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // one documents should be removed
 		assertEquals(1, val);
 	}
@@ -132,11 +132,9 @@ public class QuoteRestControllerTest {
 		radio.setResponse(userSelections);
 		questions.add(radio);
 		quote.setQuestions(questions);
-		quote.setIdentity(955006L);
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question
-		quote.setIdentity(955007L);
 		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with Radio question
 		result = mvc.perform(get("/quote/search/junit")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
@@ -148,11 +146,10 @@ public class QuoteRestControllerTest {
 	@Test
 	@WithUserAdmin
 	public void getJsonTest() throws Exception {
-		Quote quote = createQuote(955006);
+		Quote quote = createQuote();
 		String quoteJson = mapper.writeValueAsString(quote);
 		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
 				.andReturn(); // submit quote with Radio question
-		quote.setIdentity(955007L);
 		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote with CheckBox question
 		result = mvc.perform(get("/quote/search/junit")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
@@ -170,7 +167,7 @@ public class QuoteRestControllerTest {
 		assertEquals(2L, quoteListResponse.get(2).getIdentity(), 0);
 	}
 
-	private Quote createQuote(long identity) {
+	private Quote createQuote() {
 		Quote quote = new Quote();
 		ArrayList<Question> questions = new ArrayList<>();
 		CheckboxQuestion radio = new CheckboxQuestion();
@@ -190,12 +187,12 @@ public class QuoteRestControllerTest {
 		questions.add(radio);
 		questions.add(question2);
 		quote.setQuestions(questions);
-		quote.setIdentity(identity);
+		quote.setDescription("testing");
 		return quote;
 	}
 
 	private void submitQuotes() throws Exception {
-		Quote quote = createQuote(0);
+		Quote quote = createQuote();
 		String quoteJson = mapper.writeValueAsString(quote);
 		for (int i = 0; i < 3; i++) {
 			mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote

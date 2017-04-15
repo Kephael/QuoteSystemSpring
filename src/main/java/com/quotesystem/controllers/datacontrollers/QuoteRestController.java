@@ -42,9 +42,7 @@ public class QuoteRestController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		quote.setUsername(auth.getName()); // sets quote username to that of the user logged in
-		if (quote.getIdentity() == 0) {
-			quote.setIdentity(counterService.getNextSequence("quote"));
-		}
+		quote.setIdentity(counterService.getNextSequence("quote"));
 		Quote resQuote = quoteRepository.save(quote);
 		return new ResponseEntity<Quote>(resQuote, HttpStatus.OK);
 	}

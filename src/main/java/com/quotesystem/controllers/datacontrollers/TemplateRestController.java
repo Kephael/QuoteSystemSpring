@@ -40,9 +40,7 @@ public class TemplateRestController {
 	public ResponseEntity<Template> submitNewTemplate(@RequestBody Template template) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		template.setUsername(auth.getName()); // sets template username to that of the user logged in
-		if (template.getIdentity() == 0) {
-			template.setIdentity(counterService.getNextSequence("template"));
-		}
+		template.setIdentity(counterService.getNextSequence("template"));
 		Template resTemplate = templateRepository.save(template);
 		return new ResponseEntity<Template>(resTemplate, HttpStatus.OK);
 	}

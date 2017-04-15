@@ -58,16 +58,15 @@ public class TemplateRestControllerTest {
 	@Test
 	@WithUserAdmin
 	public void submitNewTemplateTest() throws Exception {
-		String templateJson = generateTemplateJson(999999L);
+		String templateJson = generateTemplateJson();
 		MvcResult result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))
 				.andReturn(); // submit template with no questions
 		Template response = mapper.readValue(result.getResponse().getContentAsString(), Template.class);
 		assertEquals(response.getUsername(), "junit");
 	}
 
-	private String generateTemplateJson(long identity) throws Exception {
+	private String generateTemplateJson() throws Exception {
 		Template template = new Template();
-		template.setIdentity(identity);
 		String templateJson = mapper.writeValueAsString(template);
 		return templateJson;
 	}
@@ -75,12 +74,12 @@ public class TemplateRestControllerTest {
 	@Test
 	@WithUserAdmin
 	public void getTemplateAndDeleteTest() throws Exception {
-		String templateJson = generateTemplateJson(999999L);
+		String templateJson = generateTemplateJson();
 		mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)); // submit template with no questions
-		MvcResult result = mvc.perform(get("/template/view/999999")).andReturn();
+		MvcResult result = mvc.perform(get("/template/view/0")).andReturn();
 		Template response = mapper.readValue(result.getResponse().getContentAsString(), Template.class);
 		assertEquals(response.getUsername(), "junit");
-		result = mvc.perform(put("/template/delete/999999")).andReturn();
+		result = mvc.perform(put("/template/delete/0")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // one template should be removed
 		assertEquals(1, val);
 	}
@@ -88,9 +87,9 @@ public class TemplateRestControllerTest {
 	@Test
 	@WithUserAdmin
 	public void getTemplatesByUsernameTest() throws Exception {
-		String templateJson = generateTemplateJson(999998L);
+		String templateJson = generateTemplateJson();
 		mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)); // submit template with no questions
-		templateJson = generateTemplateJson(999999L);
+		templateJson = generateTemplateJson();
 		mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)); // submit template with no questions
 		MvcResult result = mvc.perform(get("/template/search/junit")).andReturn();
 		ArrayList<Template> templates = mapper.readValue(result.getResponse().getContentAsString(),
@@ -101,7 +100,7 @@ public class TemplateRestControllerTest {
 	@Test
 	@WithUserAdmin
 	public void CounterServiceTemplateTest() throws Exception {
-		String templateJson = generateTemplateJson(0);
+		String templateJson = generateTemplateJson();
 		MvcResult result;
 		for (int i = 0; i < 3; i++) {
 			result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))
@@ -185,7 +184,7 @@ public class TemplateRestControllerTest {
 	}
 
 	private void submitTemplates() throws Exception {
-		String templateJson = generateTemplateJson(0);
+		String templateJson = generateTemplateJson();
 		for (int i = 0; i < 3; i++) {
 			mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)).andReturn(); // submit template 
 		}
