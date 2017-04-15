@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import com.quotesystem.auth.AuthData;
+
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.quotesystem" })
 @EnableAutoConfiguration
@@ -36,9 +38,9 @@ public class QuoteSystemSpring3Application {
 			http.httpBasic().and().sessionManagement().sessionFixation().migrateSession() // invalidate old session if user logs in again
 					.and().authorizeRequests()
 					.antMatchers(HttpMethod.OPTIONS).permitAll()
-					.antMatchers(HttpMethod.POST, "/template/**").hasAuthority("ROLE_ADMIN")
-					.antMatchers(HttpMethod.GET, "/template/**").hasAuthority("ROLE_USER").antMatchers("/quote/**").hasAuthority("ROLE_USER")
-					.antMatchers("/logout").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+					.antMatchers("/template/**").hasAnyAuthority(AuthData.ADMIN, AuthData.USER)
+					.antMatchers("/quote/**").hasAnyAuthority(AuthData.ADMIN, AuthData.USER)
+					.antMatchers("/logout").hasAnyAuthority(AuthData.ADMIN, AuthData.USER)
 					.antMatchers("/authenticate").authenticated()
 					.and().csrf().disable();
 		}

@@ -13,5 +13,5 @@ public interface QuoteRepository extends MongoRepository<Quote, String> { // Mon
 	public Long deleteByIdentity(Long identity);
 	
 	public void deleteByUsername(String username);
-
+	
 }

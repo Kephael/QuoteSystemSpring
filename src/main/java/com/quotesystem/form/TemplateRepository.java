@@ -13,4 +13,5 @@ public interface TemplateRepository extends MongoRepository<Template, String> { 
 	public Long deleteByIdentity(Long identity);
 	
 	public void deleteByUsername(String username);
+	
 }

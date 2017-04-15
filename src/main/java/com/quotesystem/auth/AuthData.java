@@ -3,6 +3,8 @@ package com.quotesystem.auth;
 import java.util.ArrayList;
 
 public class AuthData {
+	public static final String ADMIN = "ROLE_ADMIN";
+	public static final String USER = "ROLE_USER";
 	private String username;
 	private ArrayList<String> roles;
 	

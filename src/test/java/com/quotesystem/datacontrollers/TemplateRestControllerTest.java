@@ -29,6 +29,7 @@ import com.quotesystem.counter.CounterRepository;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.Template;
 import com.quotesystem.form.TemplateRepository;
+import com.quotesystem.users.WithUser;
 import com.quotesystem.users.WithUserAdmin;
 
 @RunWith(SpringRunner.class)
@@ -47,6 +48,8 @@ public class TemplateRestControllerTest {
 
 	@Before
 	public void setup() {
+		repo.deleteAll();
+		repo.deleteByUsername("junit_user");
 		repo.deleteByUsername("junit");
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mapper = new ObjectMapper();
@@ -91,22 +94,65 @@ public class TemplateRestControllerTest {
 		templateJson = generateTemplateJson(999999L);
 		mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)); // submit template with no questions
 		MvcResult result = mvc.perform(get("/template/search/junit")).andReturn();
-		ArrayList<Template> templates = mapper.readValue(result.getResponse().getContentAsString(), mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
+		ArrayList<Template> templates = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Template.class));
 		assertEquals(2, templates.size()); // expect two templates by "junit" to be retrieved
 	}
-	
+
 	@Test
 	@WithUserAdmin
 	public void CounterServiceTemplateTest() throws Exception {
 		String templateJson = generateTemplateJson(0);
-		MvcResult result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))
-				.andReturn(); // submit template 0
-		result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)).andReturn(); // submit template 1
-		result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)).andReturn(); // submit template 2
+		MvcResult result;
+		for (int i = 0; i < 3; i++) {
+			result = mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson))
+					.andReturn(); // submit template 0
+		}
 		result = mvc.perform(get("/template/search/junit")).andReturn();
 		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
 		assertEquals(2L, templateListResponse.get(2).getIdentity(), 0);
 	}
 
+	@Test
+	@WithUser
+	public void viewAllTemplateAsUserTest() throws Exception {
+		submitTemplates();
+		MvcResult result = mvc.perform(get("/template/view")).andReturn();
+		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(3, templateListResponse.size());
+	}
+
+	@Test
+	@WithUser
+	public void viewOnlyUserTemplatesTest() throws Exception {
+		submitTemplates();
+		Template anotherUserTemplate = new Template();
+		anotherUserTemplate.setUsername("junit");
+		anotherUserTemplate.setIdentity(934343L);
+		repo.save(anotherUserTemplate); // manually saves a template as a different user
+		MvcResult result = mvc.perform(get("/template/view")).andReturn();
+		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(3, templateListResponse.size()); // only the three junit_user Templates should be provided as a response
+	}
+
+	@Test
+	@WithUserAdmin
+	public void ViewAllTemplateTestAsAdmin() throws Exception {
+		submitTemplates();
+		MvcResult result = mvc.perform(get("/template/view")).andReturn();
+		ArrayList<Quote> templateListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(3, templateListResponse.size());
+	}
+
+
+	private void submitTemplates() throws Exception {
+		String templateJson = generateTemplateJson(0);
+		for (int i = 0; i < 3; i++) {
+			mvc.perform(post("/template").contentType(MediaType.APPLICATION_JSON).content(templateJson)).andReturn(); // submit template 
+		}
+	}
 }

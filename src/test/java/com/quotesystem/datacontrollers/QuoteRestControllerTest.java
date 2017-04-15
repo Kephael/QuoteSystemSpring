@@ -24,16 +24,19 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
 import com.quotesystem.counter.CounterRepository;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
+import com.quotesystem.form.Template;
 import com.quotesystem.form.questions.BooleanQuestion;
 import com.quotesystem.form.questions.CheckboxQuestion;
 import com.quotesystem.form.questions.LongResponseQuestion;
 import com.quotesystem.form.questions.Question;
 import com.quotesystem.form.questions.SelectionOption;
+import com.quotesystem.users.WithUser;
 import com.quotesystem.users.WithUserAdmin;
 
 @RunWith(SpringRunner.class)
@@ -57,6 +60,7 @@ public class QuoteRestControllerTest {
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mapper = new ObjectMapper();
 		repo.deleteByUsername("junit"); // delete any junit entries
+		repo.deleteByUsername("junit_user");
 		counterRepo.deleteAll();
 	}
 
@@ -163,13 +167,8 @@ public class QuoteRestControllerTest {
 	@Test
 	@WithUserAdmin
 	public void CounterServiceQuoteTest() throws Exception {
-		Quote quote = createQuote(0);
-		String quoteJson = mapper.writeValueAsString(quote);
-		MvcResult result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson))
-				.andReturn(); // submit quote 0
-		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote 1
-		result = mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote 2
-		result = mvc.perform(get("/quote/search/junit")).andReturn();
+		submitQuotes();
+		MvcResult result = mvc.perform(get("/quote/search/junit")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
 		assertEquals(2L, quoteListResponse.get(2).getIdentity(), 0);
@@ -197,6 +196,48 @@ public class QuoteRestControllerTest {
 		quote.setQuestions(questions);
 		quote.setIdentity(identity);
 		return quote;
+	}
+	
+	private void submitQuotes() throws Exception {
+		Quote quote = createQuote(0);
+		String quoteJson = mapper.writeValueAsString(quote);
+		for (int i = 0; i < 3; i++) {
+			mvc.perform(post("/quote").contentType(MediaType.APPLICATION_JSON).content(quoteJson)).andReturn(); // submit quote
+		}
+	}
+
+	@Test
+	@WithUser
+	public void viewAllQuotesAsUserTest() throws Exception {
+		submitQuotes();
+		MvcResult result = mvc.perform(get("/quote/view")).andReturn();
+		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(3, quoteListResponse.size());
+	}
+
+	@Test
+	@WithUser
+	public void viewOnlyUserQuotesTest() throws Exception {
+		submitQuotes();
+		Quote anotherUserQuote = new Quote();
+		anotherUserQuote.setUsername("junit");
+		anotherUserQuote.setIdentity(934343L);
+		repo.save(anotherUserQuote); // manually saves a quote as a different user
+		MvcResult result = mvc.perform(get("/quote/view")).andReturn();
+		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(3, quoteListResponse.size()); // only the three junit_user quotes should be provided as a response
+	}
+
+	@Test
+	@WithUserAdmin
+	public void ViewAllTemplateTestAsAdmin() throws Exception {
+		submitQuotes();
+		MvcResult result = mvc.perform(get("/quote/view")).andReturn();
+		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
+				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
+		assertEquals(3, quoteListResponse.size());
 	}
 
 }
