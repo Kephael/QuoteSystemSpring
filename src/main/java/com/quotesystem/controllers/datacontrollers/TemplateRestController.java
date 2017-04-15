@@ -90,17 +90,11 @@ public class TemplateRestController {
 	}
 
 	/*
-	 * @return a list of all quotes if the user is an admin, otherwise returns all quotes made by them
-	 */
+	 * @return a list of all templates regardless of role
+	  */
 	@RequestMapping(value = "/view", method = RequestMethod.GET)
 	public ResponseEntity<List<Template>> getAllQuotes() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN))) {
-			List<Template> allTemplates = templateRepository.findAll(); // administrator users can see all quotes
+			List<Template> allTemplates = templateRepository.findAll(); // all users can see all templates
 			return new ResponseEntity<List<Template>>(allTemplates, HttpStatus.OK);
-		}
-		List<Template> userQuotes = templateRepository.findByUsername(auth.getName()); // non-administrators can only see their quotes
-		return new ResponseEntity<List<Template>>(userQuotes, HttpStatus.OK);
 	}
-
 }

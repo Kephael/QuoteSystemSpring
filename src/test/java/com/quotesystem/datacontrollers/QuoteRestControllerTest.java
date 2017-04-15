@@ -25,13 +25,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quotesystem.QuoteSystemSpring3Application;
 import com.quotesystem.counter.CounterRepository;
 import com.quotesystem.form.Quote;
 import com.quotesystem.form.QuoteRepository;
-import com.quotesystem.form.Template;
 import com.quotesystem.form.questions.BooleanQuestion;
 import com.quotesystem.form.questions.CheckboxQuestion;
 import com.quotesystem.form.questions.LongResponseQuestion;
@@ -46,8 +44,6 @@ import com.quotesystem.users.WithUserAdmin;
 public class QuoteRestControllerTest {
 
 	@Autowired
-	private TestRestTemplate restTemplate;
-	@Autowired
 	private WebApplicationContext context;
 	private MockMvc mvc;
 	private ObjectMapper mapper;
@@ -60,9 +56,8 @@ public class QuoteRestControllerTest {
 	public void setup() {
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mapper = new ObjectMapper();
-		repo.deleteByUsername("junit"); // delete any junit entries
-		repo.deleteByUsername("junit_user");
 		counterRepo.deleteAll();
+		repo.deleteAll();
 	}
 
 	@Test
@@ -221,7 +216,7 @@ public class QuoteRestControllerTest {
 	@WithUser
 	public void viewOnlyUserQuotesTest() throws Exception {
 		submitQuotes();
-		saveQuoteAsAdminManually();
+		saveQuoteManually("junit");
 		MvcResult result = mvc.perform(get("/quote/view")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
@@ -244,26 +239,36 @@ public class QuoteRestControllerTest {
 		MvcResult result = mvc.perform(put("/quote/delete/999991")).andReturn();
 		long val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed
 		assertEquals(0, val);
-		saveQuoteAsAdminManually();
+		saveQuoteManually("junit");
 		result = mvc.perform(put("/quote/delete/934343")).andReturn();
 		val = mapper.readValue(result.getResponse().getContentAsString(), Long.class); // no quote should be removed as it belongs to a different user
 		assertEquals(0, val);
 	}
 
-	private void saveQuoteAsAdminManually() {
+	private void saveQuoteManually(String username) {
 		Quote anotherUserQuote = new Quote();
-		anotherUserQuote.setUsername("junit");
+		anotherUserQuote.setUsername(username);
 		anotherUserQuote.setIdentity(934343L);
 		repo.save(anotherUserQuote);
 	}
-	
+
 	@Test
 	@WithUser
 	public void viewInvalidQuoteTest() throws Exception {
-		saveQuoteAsAdminManually();
+		saveQuoteManually("junit");
 		MvcResult result = mvc.perform(get("/quote/view/934343")).andReturn(); // attempt to retrieve quote made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 		result = mvc.perform(get("/quote/view/999987")).andReturn(); // attempt to view nonexistent quote
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+	}
+
+	@Test
+	@WithUser
+	public void viewAnotherUsersQuotesAsUserTest() throws Exception {
+		saveQuoteManually("junit_fake_user");
+		MvcResult result = mvc.perform(get("/quote/search/junit_fake_user")).andReturn(); // attempt to retrieve template made by another user
+		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+		result = mvc.perform(get("/quote/search/junit_nonexistant_user")).andReturn(); // attempt to retrieve template made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 	}
 
