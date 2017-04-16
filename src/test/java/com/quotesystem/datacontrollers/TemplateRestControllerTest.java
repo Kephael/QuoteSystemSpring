@@ -160,7 +160,7 @@ public class TemplateRestControllerTest {
 	public void viewInvalidTemplateTest() throws Exception {
 		saveTemplateManually("junit");
 		MvcResult result = mvc.perform(get("/template/view/934343")).andReturn(); // attempt to retrieve template made by another user
-		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
 		result = mvc.perform(get("/template/view/999987")).andReturn(); // attempt to view nonexistent template
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 	}

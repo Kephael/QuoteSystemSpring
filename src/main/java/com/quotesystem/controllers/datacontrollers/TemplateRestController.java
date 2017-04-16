@@ -66,11 +66,10 @@ public class TemplateRestController {
 	public ResponseEntity<Template> getExistingTemplate(@PathVariable Long identity) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Template resTemplate = templateRepository.findByIdentity(identity);
-		if (resTemplate != null && (auth.getName().equals(resTemplate.getUsername())
-				|| auth.getAuthorities().contains(new SimpleGrantedAuthority(AuthData.ADMIN)))) {
+		if (resTemplate != null) {
 			return new ResponseEntity<Template>(resTemplate, HttpStatus.OK);
 		}
-		return new ResponseEntity<Template>(new Template(), HttpStatus.BAD_REQUEST); // invalid credentials to view template
+		return new ResponseEntity<Template>(new Template(), HttpStatus.BAD_REQUEST); // template requested does not exist
 	}
 
 	/*
