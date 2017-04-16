@@ -1,8 +1,9 @@
 package com.quotesystem.form.questions;
 
-import com.mongodb.gridfs.GridFS;
-
-public class ImageQuestion extends AbstractQuestion<GridFS, Double> {
+/*
+ * User response is a String which contains the image encoded in base64
+ */
+public class ImageQuestion extends AbstractQuestion<String, Double> {
 
 	@Override
 	public double calculateServiceCost() {
