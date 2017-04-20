@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,8 +19,14 @@ import com.quotesystem.auth.AuthData;
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.quotesystem" })
 @EnableAutoConfiguration
-public class QuoteSystemSpring3Application {
+public class QuoteSystemSpring3Application extends SpringBootServletInitializer {
 
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(QuoteSystemSpring3Application.class);
+    }
+	
 	public static void main(String[] args) {
 		SpringApplication.run(QuoteSystemSpring3Application.class, args);
 	}
