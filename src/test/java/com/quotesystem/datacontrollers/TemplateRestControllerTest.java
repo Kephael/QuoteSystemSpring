@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.ws.rs.core.MediaType;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +51,12 @@ public class TemplateRestControllerTest {
 	public void setup() {
 		mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		mapper = new ObjectMapper();
+		counterRepo.deleteAll();
+		repo.deleteAll();
+	}
+	
+	@After
+	public void tearDown() {
 		counterRepo.deleteAll();
 		repo.deleteAll();
 	}
