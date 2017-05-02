@@ -270,9 +270,9 @@ public class QuoteRestControllerTest {
 	@WithUser
 	public void viewAnotherUsersQuotesAsUserTest() throws Exception {
 		saveQuoteManually("junit_fake_user");
-		MvcResult result = mvc.perform(get("/quote/search/junit_fake_user")).andReturn(); // attempt to retrieve template made by another user
+		MvcResult result = mvc.perform(get("/quote/search/junit_fake_user")).andReturn(); // attempt to retrieve quote made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-		result = mvc.perform(get("/quote/search/junit_nonexistant_user")).andReturn(); // attempt to retrieve template made by another user
+		result = mvc.perform(get("/quote/search/junit_nonexistant_user")).andReturn(); // attempt to retrieve quote made by another user
 		assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
 	}
 
