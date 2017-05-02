@@ -25,14 +25,14 @@ public class QuoteTest {
 	@Test
 	public void idTest() {
 		quote.setId("823s");
-		assertEquals(quote.getId(), "823s");
+		assertEquals("823s", quote.getId());
 	}
 
 	@Test
 	public void getEntriesTest() {
 		questions.add(question);
 		quote.setQuestions(questions);
-		assertEquals(quote.getQuestions(), questions);
+		assertEquals(questions, quote.getQuestions());
 	}
 
 	@Test

@@ -230,10 +230,11 @@ public class QuoteRestControllerTest {
 	@WithUserAdmin
 	public void ViewAllTemplateTestAsAdmin() throws Exception {
 		submitQuotes();
+		saveQuoteManually("junit_user");
 		MvcResult result = mvc.perform(get("/quote/view")).andReturn();
 		ArrayList<Quote> quoteListResponse = mapper.readValue(result.getResponse().getContentAsString(),
 				mapper.getTypeFactory().constructCollectionType(ArrayList.class, Quote.class));
-		assertEquals(3, quoteListResponse.size());
+		assertEquals(4, quoteListResponse.size());
 	}
 
 	@Test
