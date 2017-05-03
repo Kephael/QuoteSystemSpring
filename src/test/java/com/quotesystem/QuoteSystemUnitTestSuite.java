@@ -7,9 +7,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import com.quotesystem.auth.AuthenticationControllerTest;
-import com.quotesystem.datacontrollers.QuoteRestControllerTest;
-import com.quotesystem.datacontrollers.TemplateRestControllerTest;
+import com.quotesystem.controllers.auth.AuthenticationControllerTest;
+import com.quotesystem.controllers.datacontrollers.QuoteRestControllerTest;
+import com.quotesystem.controllers.datacontrollers.TemplateRestControllerTest;
 import com.quotesystem.form.QuoteTest;
 import com.quotesystem.form.TemplateTest;
 import com.quotesystem.form.questions.BooleanQuestionTest;

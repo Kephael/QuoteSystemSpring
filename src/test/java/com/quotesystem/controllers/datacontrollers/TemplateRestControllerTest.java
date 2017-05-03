@@ -1,4 +1,4 @@
-package com.quotesystem.datacontrollers;
+package com.quotesystem.controllers.datacontrollers;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;

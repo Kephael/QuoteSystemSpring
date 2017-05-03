@@ -1,4 +1,4 @@
-package com.quotesystem.auth;
+package com.quotesystem.controllers.auth;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
